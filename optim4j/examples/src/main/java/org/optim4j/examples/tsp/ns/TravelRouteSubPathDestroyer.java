@@ -1,5 +1,6 @@
 package org.optim4j.examples.tsp.ns;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.optim4j.ns.Destroyer;
@@ -19,20 +20,21 @@ public class TravelRouteSubPathDestroyer implements Destroyer<TravelRoute, Parti
 
 		int startIndex = (int) (Math.random() * representation.size());
 		int endIndex = (startIndex + noOfEdgesToBeRemoved) <= nodeCount - 1 ? startIndex + noOfEdgesToBeRemoved
-				: startIndex + noOfEdgesToBeRemoved - nodeCount + 1;
+				: (startIndex + noOfEdgesToBeRemoved - nodeCount);
 
 		if (startIndex <= endIndex) {
-			final List<Node> newRepresentation = representation.subList(0, startIndex + 1);
+			final List<Node> newRepresentation = new ArrayList<>(representation.subList(0, startIndex));
 			newRepresentation.addAll(representation.subList(endIndex + 1, nodeCount));
 
 			return new PartiallyDestroyedTravelRoute(
 					new TravelRoute(newRepresentation, travelRoute.getFitnessCalculator()),
 					representation.subList(startIndex, endIndex + 1));
 		} else {
-			final List<Node> destroyedNodes = representation.subList(startIndex, nodeCount);
+			final List<Node> destroyedNodes = new ArrayList<>(representation.subList(startIndex, nodeCount));
 			destroyedNodes.addAll(representation.subList(0, endIndex + 1));
+//			representation.subList(0, endIndex + 1).stream().forEach(node -> destroyedNodes.add(node));
 
-			return new PartiallyDestroyedTravelRoute(new TravelRoute(representation.subList(endIndex, startIndex + 1),
+			return new PartiallyDestroyedTravelRoute(new TravelRoute(representation.subList(endIndex + 1, startIndex),
 					travelRoute.getFitnessCalculator()), destroyedNodes);
 		}
 	}

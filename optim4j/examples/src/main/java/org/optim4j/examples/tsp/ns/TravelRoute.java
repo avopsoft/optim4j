@@ -1,6 +1,5 @@
 package org.optim4j.examples.tsp.ns;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;

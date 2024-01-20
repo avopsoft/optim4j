@@ -18,7 +18,7 @@ public class ThresholdAcceptanceCriteria implements AcceptanceCriteria {
 	public boolean isAcceptable(Agent current, Agent neighbour) {
 		if (neighbour.compareTo(current) >= 0) {
 			return true;
-		} else if (neighbour.compareTo(current) <= threshold) {
+		} else if (current.compareTo(neighbour) <= threshold) {
 			threshold *= reductionFactor;
 			return true;
 		}

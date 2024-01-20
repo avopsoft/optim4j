@@ -11,7 +11,12 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.optim4j.ns.NeighborhoodSearchOptimizer;
+import org.optim4j.ns.acceptancecriteria.GreedyAcceptanceCriteria;
+import org.optim4j.ns.acceptancecriteria.RandomWalkAcceptanceCriteria;
 import org.optim4j.ns.acceptancecriteria.SimulatedAnnealingAcceptanceCriteria;
+import org.optim4j.ns.acceptancecriteria.SimulatedAnnealingOldBachelorAcceptanceCriteria;
+import org.optim4j.ns.acceptancecriteria.ThresholdAcceptanceCriteria;
+import org.optim4j.ns.acceptancecriteria.ThresholdOldBachelorAcceptanceCriteria;
 import org.optim4j.ns.completioncond.UnchangedBestFitness;
 
 public class TSPNeighborhoodSearchOptimizer {
@@ -23,8 +28,8 @@ public class TSPNeighborhoodSearchOptimizer {
 		Collections.shuffle(nodes);
 		TravelRoute travelRoute = new TravelRoute(nodes, new TravelRouteFitnessCalculator());
 		NeighborhoodSearchOptimizer<TravelRoute, PartiallyDestroyedTravelRoute> neighborhoodSearchOptimizer = new NeighborhoodSearchOptimizer<>(
-				new SimulatedAnnealingAcceptanceCriteria(.01), new UnchangedBestFitness(5000),
-				new TravelRouteRandomRepairer(), new TravelRouteRandomDestroyer((int) (nodes.size() * .1)),
+				new SimulatedAnnealingAcceptanceCriteria(Double.MAX_VALUE, .99), new UnchangedBestFitness(50000),
+				new TravelRouteRandomRepairer(), new TravelRouteWorstEdgeDestroyer(),
 				new GraphicalObserver("TSP Optimizer", "generations", "cost"), "TSP");
 		TravelRoute optimizedTravelRoute = neighborhoodSearchOptimizer.optimize(travelRoute);
 		System.out.println(optimizedTravelRoute);

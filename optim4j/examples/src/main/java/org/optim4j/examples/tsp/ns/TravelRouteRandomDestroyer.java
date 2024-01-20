@@ -9,17 +9,12 @@ import org.optim4j.ns.Destroyer;
 
 public class TravelRouteRandomDestroyer implements Destroyer<TravelRoute, PartiallyDestroyedTravelRoute> {
 
-	private int noOfEdgesToBeRemoved;
-
-	public TravelRouteRandomDestroyer(int noOfEdgesToBeRemoved) {
-		this.noOfEdgesToBeRemoved = noOfEdgesToBeRemoved;
-	}
-
 	public PartiallyDestroyedTravelRoute destroy(TravelRoute travelRoute) {
 		final List<Node> routeNodes = travelRoute.getRepresentation();
 		final List<Node> modRouteNodes = new ArrayList<>();
 		final List<Node> removedNodes = new ArrayList<>();
-		final Set<Integer> removableIndexes = generateRandomIndexes(noOfEdgesToBeRemoved + 1, routeNodes.size());
+		final Set<Integer> removableIndexes = generateRandomIndexes((int) (Math.random() * routeNodes.size()) + 1,
+				routeNodes.size());
 		removableIndexes.stream().forEach(index -> {
 			removedNodes.add(routeNodes.get(index));
 		});

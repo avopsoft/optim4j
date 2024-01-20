@@ -11,8 +11,9 @@ public class ThresholdOldBachelorAcceptanceCriteria implements AcceptanceCriteri
 
 	private double incrementFactor;
 
-	public ThresholdOldBachelorAcceptanceCriteria(double threshold, double reductionFactor, double incrementFactor) {
-		this.threshold = threshold;
+	public ThresholdOldBachelorAcceptanceCriteria(double initialThreshold, double reductionFactor,
+			double incrementFactor) {
+		this.threshold = initialThreshold;
 		this.reductionFactor = reductionFactor;
 		this.incrementFactor = incrementFactor;
 	}
@@ -21,7 +22,7 @@ public class ThresholdOldBachelorAcceptanceCriteria implements AcceptanceCriteri
 	public boolean isAcceptable(Agent current, Agent neighbour) {
 		if (neighbour.compareTo(current) >= 0) {
 			return true;
-		} else if (neighbour.compareTo(current) <= threshold) {
+		} else if (current.compareTo(neighbour) <= threshold) {
 			threshold *= reductionFactor;
 			return true;
 		} else {
