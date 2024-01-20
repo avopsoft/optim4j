@@ -32,7 +32,6 @@ public class TravelRouteSubPathDestroyer implements Destroyer<TravelRoute, Parti
 		} else {
 			final List<Node> destroyedNodes = new ArrayList<>(representation.subList(startIndex, nodeCount));
 			destroyedNodes.addAll(representation.subList(0, endIndex + 1));
-//			representation.subList(0, endIndex + 1).stream().forEach(node -> destroyedNodes.add(node));
 
 			return new PartiallyDestroyedTravelRoute(new TravelRoute(representation.subList(endIndex + 1, startIndex),
 					travelRoute.getFitnessCalculator()), destroyedNodes);
