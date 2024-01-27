@@ -2,6 +2,22 @@ package org.optim4j.ns;
 
 import org.optim4j.ns.AdaptiveRepairerDestroyerManager.IncrementType;
 
+/**
+ * An implementation of adaptive large neighborhood search algorithm.
+ * 
+ * <p>
+ * The implementation accepts a solution agent which is a local optima of the
+ * problem domain. The optimization process transforms the same using destroy
+ * and repair heuristics over multiple iterations. The new solution in each
+ * iteration is accepted based on provided acceptance criteria. The process
+ * continues until the completion condition is reached.
+ * </p>
+ * 
+ * @author Avijit Basak
+ *
+ * @param <A>
+ * @param <T>
+ */
 public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implements Optimizer<A> {
 
 	private CompletionCondition completionCondition;

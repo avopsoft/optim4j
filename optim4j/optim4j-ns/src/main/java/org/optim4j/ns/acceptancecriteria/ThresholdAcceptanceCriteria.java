@@ -11,13 +11,13 @@ import org.optim4j.ns.Agent;
  */
 public class ThresholdAcceptanceCriteria implements AcceptanceCriteria {
 
-	/*
+	/**
 	 * Threshold to consider in case neighbor agent fitness is lesser than current
 	 * one.
 	 */
 	private double threshold;
 
-	/*
+	/**
 	 * The factor by which the threshold is to be reduced on each iteration of
 	 * optimization.
 	 */

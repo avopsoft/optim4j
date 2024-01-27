@@ -11,12 +11,12 @@ import org.optim4j.ns.Agent;
  */
 public class SimulatedAnnealingAcceptanceCriteria implements AcceptanceCriteria {
 
-	/*
+	/**
 	 * Temperature of annealing process.
 	 */
 	private double temperature;
 
-	/*
+	/**
 	 * Decay rate of temperature.
 	 */
 	private final double decayRate;
