@@ -1,5 +1,6 @@
 package org.optim4j.examples.tsp.ns;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,6 +35,12 @@ public class TravelRoute implements Agent {
 				fitnessCalculator);
 	}
 
+	public TravelRoute insert(int index, Node node) {
+		List<Node> newRepresentation = new ArrayList<>(representation);
+		newRepresentation.add(index, node);
+		return new TravelRoute(newRepresentation, this.fitnessCalculator);
+	}
+
 	public FitnessCalculator getFitnessCalculator() {
 		return fitnessCalculator;
 	}
@@ -48,6 +55,10 @@ public class TravelRoute implements Agent {
 
 	public double evaluate() {
 		return fitnessCalculator.calculate(this);
+	}
+
+	public int len() {
+		return representation.size();
 	}
 
 }

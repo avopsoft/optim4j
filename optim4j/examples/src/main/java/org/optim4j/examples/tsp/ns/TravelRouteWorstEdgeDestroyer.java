@@ -13,7 +13,7 @@ public class TravelRouteWorstEdgeDestroyer implements Destroyer<TravelRoute, Par
 
 	@Override
 	public PartiallyDestroyedTravelRoute destroy(TravelRoute travelRoute) {
-		int noOfEdgesToBeRemoved = (int) (Math.random() * travelRoute.getRepresentation().size());
+		int noOfEdgesToBeRemoved = ((int) (Math.random() * travelRoute.len())) % (travelRoute.len() / 2);
 		final List<Node> removedNodes = new ArrayList<>();
 		final Map<Double, Node> distanceMap = new TreeMap<>(new Comparator<Double>() {
 

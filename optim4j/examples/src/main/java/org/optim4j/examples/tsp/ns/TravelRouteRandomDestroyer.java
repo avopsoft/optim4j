@@ -13,7 +13,7 @@ public class TravelRouteRandomDestroyer implements Destroyer<TravelRoute, Partia
 		final List<Node> routeNodes = travelRoute.getRepresentation();
 		final List<Node> modRouteNodes = new ArrayList<>();
 		final List<Node> removedNodes = new ArrayList<>();
-		final Set<Integer> removableIndexes = generateRandomIndexes((int) (Math.random() * routeNodes.size()) + 1,
+		final Set<Integer> removableIndexes = generateRandomIndexes(((int) (Math.random() * routeNodes.size())) % (routeNodes.size() / 2) + 1,
 				routeNodes.size());
 		removableIndexes.stream().forEach(index -> {
 			removedNodes.add(routeNodes.get(index));

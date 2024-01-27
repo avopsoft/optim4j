@@ -1,5 +1,13 @@
 package org.optim4j.ns;
 
+/**
+ * An implementation of neighborhood search optimization process.
+ * 
+ * @author Avijit Basak
+ *
+ * @param <A>
+ * @param <T>
+ */
 public class NeighborhoodSearchOptimizer<A extends Agent, T> implements Optimizer<A> {
 
 	private CompletionCondition completionCondition;

@@ -1,7 +1,6 @@
 package org.optim4j.ns;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.optim4j.ns.AdaptiveRepairerDestroyerManager.IncrementType;
 
 public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implements Optimizer<A> {
 
@@ -13,19 +12,13 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 
 	private String name;
 
-	private List<Double> repairerScores = new ArrayList<>();
-
-	private List<Double> destroyerScores = new ArrayList<>();
-
 	private AdaptiveRepairerDestroyerManager<T, A> repairerDestroyerManager;
 
-	public AdaptiveLargeNeighborhoodSearchOptimizer(AcceptanceCriteria acceptanceCriteria, CompletionCondition completionCondition,
-			List<Double> repairerScores, List<Double> destroyerScores, Observer observer, String name,
+	public AdaptiveLargeNeighborhoodSearchOptimizer(AcceptanceCriteria acceptanceCriteria,
+			CompletionCondition completionCondition, Observer observer, String name,
 			AdaptiveRepairerDestroyerManager<T, A> repairerDestroyerManager) {
 		this.acceptanceCriteria = acceptanceCriteria;
 		this.completionCondition = completionCondition;
-		this.repairerScores.addAll(repairerScores);
-		this.destroyerScores.addAll(destroyerScores);
 		this.observer = observer;
 		this.name = name;
 		this.repairerDestroyerManager = repairerDestroyerManager;
@@ -38,33 +31,23 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 			observer.notify(bestAgent, name, generation++);
 
 			// Extract repairer and destroyer.
-			Repairer<T, A> repairer = repairerDestroyerManager.getRepairer();
-			Destroyer<A, T> destroyer = repairerDestroyerManager.getDestroyer();
+			final Repairer<T, A> repairer = repairerDestroyerManager.getRepairer();
+			final Destroyer<A, T> destroyer = repairerDestroyerManager.getDestroyer();
 
-			// Find the neighbour solution.
-			A neighbour = repairer.repair(destroyer.destroy(currentAgent));
-
-			// Check if the solution is acceptable.
-			boolean isNeighbourAcceptable = acceptanceCriteria.isAcceptable(currentAgent, neighbour);
+			// Find the neighbor solution.
+			final A neighbour = repairer.repair(destroyer.destroy(currentAgent));
 
 			// Update the repairer and destroyer scores.
 			if (neighbour.compareTo(bestAgent) >= 0) {
-				repairerDestroyerManager.updateRepairerScore(repairer, repairerScores.get(0));
-				repairerDestroyerManager.updateDestroyerScore(destroyer, destroyerScores.get(0));
-			} else if (neighbour.compareTo(currentAgent) >= 0) {
-				repairerDestroyerManager.updateRepairerScore(repairer, repairerScores.get(1));
-				repairerDestroyerManager.updateDestroyerScore(destroyer, destroyerScores.get(1));
-			} else if (isNeighbourAcceptable) {
-				repairerDestroyerManager.updateRepairerScore(repairer, repairerScores.get(2));
-				repairerDestroyerManager.updateDestroyerScore(destroyer, destroyerScores.get(2));
-			}
-
-			// Update the solution agents.
-			if (isNeighbourAcceptable) {
+				repairerDestroyerManager.updateScores(repairer, destroyer, IncrementType.NEIGHBOR_BETTER_THAN_BEST);
 				currentAgent = neighbour;
-				if (currentAgent.compareTo(bestAgent) >= 0) {
-					bestAgent = currentAgent;
-				}
+				bestAgent = neighbour;
+			} else if (neighbour.compareTo(currentAgent) >= 0) {
+				repairerDestroyerManager.updateScores(repairer, destroyer, IncrementType.NEIGHBOR_BETTER_THAN_CURRENT);
+				currentAgent = neighbour;
+			} else if (acceptanceCriteria.isAcceptable(currentAgent, neighbour)) {
+				repairerDestroyerManager.updateScores(repairer, destroyer, IncrementType.NEIGHBOR_ACCEPTABLE);
+				currentAgent = neighbour;
 			}
 		}
 		return bestAgent;

@@ -3,6 +3,13 @@ package org.optim4j.ns.completioncond;
 import org.optim4j.ns.Agent;
 import org.optim4j.ns.CompletionCondition;
 
+/**
+ * A completion condition based on unchanged fitness value for predefined number
+ * of generations.
+ * 
+ * @author Avijit Basak
+ *
+ */
 public class UnchangedBestFitness implements CompletionCondition {
 
 	private final int maxNoOfGenerationsWithUnchangedBestFitness;
