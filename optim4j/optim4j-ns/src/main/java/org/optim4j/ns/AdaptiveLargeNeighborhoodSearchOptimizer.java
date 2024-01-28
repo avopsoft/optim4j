@@ -121,27 +121,28 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 			Set<Repairer<T, A>> repairers = repairerScoreMap.keySet();
 			Set<Destroyer<A, T>> destroyers = destroyerScoreMap.keySet();
 			Double cumulativeScore = Double.valueOf(0);
+			System.out.println("*************repairers****************");
 			for (Repairer<T, A> repairer : repairers) {
 				ScoreBoundary scoreBoundary = new ScoreBoundary(cumulativeScore,
 						cumulativeScore = (cumulativeScore + repairerScoreMap.get(repairer)));
+				System.out.println(repairer.getClass().getName() + " : " + scoreBoundary.toString());
 				repairerScoreBoundaries.put(scoreBoundary, repairer);
 			}
-			System.out.println(repairerScoreBoundaries);
 
+			System.out.println("*************destroyers****************");
 			cumulativeScore = Double.valueOf(0);
 			for (Destroyer<A, T> destroyer : destroyers) {
 				ScoreBoundary scoreBoundary = new ScoreBoundary(cumulativeScore,
 						cumulativeScore = (cumulativeScore + destroyerScoreMap.get(destroyer)));
+				System.out.println(destroyer.getClass().getName() + " : " + scoreBoundary.toString());
 				destroyerScoreBoundaries.put(scoreBoundary, destroyer);
 			}
-			System.out.println(destroyerScoreBoundaries);
+//			System.out.println(destroyerScoreBoundaries);
 		}
 
 		private Repairer<T, A> getRepairer() {
 			Optional<Double> totalScore = repairerScoreBoundaries.keySet().stream()
 					.map(scoreBoundary -> scoreBoundary.maxScore).reduce((Double t, Double u) -> t > u ? t : u);
-//			Optional<Double> totalScore = repairerScoreMap.keySet().stream().map(t -> repairerScoreMap.get(t))
-//					.reduce((Double t, Double u) -> t + u);
 			double randomScore = Math.random() * totalScore.get();
 			for (ScoreBoundary scoreBoundary : repairerScoreBoundaries.keySet()) {
 				if (scoreBoundary.isBetween(randomScore)) {
@@ -154,8 +155,6 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		private Destroyer<A, T> getDestroyer() {
 			Optional<Double> totalScore = destroyerScoreBoundaries.keySet().stream()
 					.map(scoreBoundary -> scoreBoundary.maxScore).reduce((Double t, Double u) -> t > u ? t : u);
-//			Optional<Double> totalScore = destroyerScoreMap.keySet().stream().map(t -> destroyerScoreMap.get(t))
-//					.reduce((Double t, Double u) -> t + u);
 			double randomScore = Math.random() * totalScore.get();
 			for (ScoreBoundary scoreBoundary : destroyerScoreBoundaries.keySet()) {
 				if (scoreBoundary.isBetween(randomScore)) {
@@ -182,7 +181,7 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 
 			@Override
 			public String toString() {
-				return "ScoreBoundary [minScore=" + minScore + ", maxScore=" + maxScore + "]";
+				return "ScoreRange: " + (maxScore - minScore);
 			}
 
 		}
