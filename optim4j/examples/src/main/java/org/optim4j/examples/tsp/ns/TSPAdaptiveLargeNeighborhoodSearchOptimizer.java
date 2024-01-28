@@ -11,7 +11,6 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.optim4j.ns.AdaptiveLargeNeighborhoodSearchOptimizer;
-import org.optim4j.ns.AdaptiveRepairerDestroyerManager;
 import org.optim4j.ns.Destroyer;
 import org.optim4j.ns.Repairer;
 import org.optim4j.ns.acceptancecriteria.SimulatedAnnealingAcceptanceCriteria;
@@ -36,12 +35,14 @@ public class TSPAdaptiveLargeNeighborhoodSearchOptimizer {
 		destroyers.add(new TravelRouteWorstEdgeDestroyer());
 		destroyers.add(new TravelRouteSubPathDestroyer((int) (travelRoute.len() * .2)));
 
-		AdaptiveRepairerDestroyerManager<PartiallyDestroyedTravelRoute, TravelRoute> adaptiveRepairerDestroyerManager = new AdaptiveRepairerDestroyerManager<>(
-				repairers, destroyers);
+//		AdaptiveScoreBasedRepairerDestroyerManager<TravelRoute, PartiallyDestroyedTravelRoute> adaptiveRepairerDestroyerManager = new AdaptiveScoreBasedRepairerDestroyerManager<>(
+//				repairers, destroyers);
 
+//		RandomRepairerDestroyerManager<TravelRoute, PartiallyDestroyedTravelRoute> repairerDestroyerManager = new RandomRepairerDestroyerManager<>(
+//				repairers, destroyers);
 		AdaptiveLargeNeighborhoodSearchOptimizer<TravelRoute, PartiallyDestroyedTravelRoute> alnsOptimizer = new AdaptiveLargeNeighborhoodSearchOptimizer<>(
 				new SimulatedAnnealingAcceptanceCriteria(Double.MAX_VALUE, .99), new UnchangedBestFitness(5000),
-				new GraphicalObserver("TSP Optimizer", "generations", "cost"), "TSP", adaptiveRepairerDestroyerManager);
+				new GraphicalObserver("TSP Optimizer", "generations", "cost"), "TSP", repairers, destroyers);
 		TravelRoute optimizedTravelRoute = alnsOptimizer.optimize(travelRoute);
 		System.out.println(optimizedTravelRoute);
 	}
