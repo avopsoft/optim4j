@@ -121,23 +121,18 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 			Set<Repairer<T, A>> repairers = repairerScoreMap.keySet();
 			Set<Destroyer<A, T>> destroyers = destroyerScoreMap.keySet();
 			Double cumulativeScore = Double.valueOf(0);
-			System.out.println("*************repairers****************");
 			for (Repairer<T, A> repairer : repairers) {
 				ScoreBoundary scoreBoundary = new ScoreBoundary(cumulativeScore,
 						cumulativeScore = (cumulativeScore + repairerScoreMap.get(repairer)));
-				System.out.println(repairer.getClass().getName() + " : " + scoreBoundary.toString());
 				repairerScoreBoundaries.put(scoreBoundary, repairer);
 			}
 
-			System.out.println("*************destroyers****************");
 			cumulativeScore = Double.valueOf(0);
 			for (Destroyer<A, T> destroyer : destroyers) {
 				ScoreBoundary scoreBoundary = new ScoreBoundary(cumulativeScore,
 						cumulativeScore = (cumulativeScore + destroyerScoreMap.get(destroyer)));
-				System.out.println(destroyer.getClass().getName() + " : " + scoreBoundary.toString());
 				destroyerScoreBoundaries.put(scoreBoundary, destroyer);
 			}
-//			System.out.println(destroyerScoreBoundaries);
 		}
 
 		private Repairer<T, A> getRepairer() {

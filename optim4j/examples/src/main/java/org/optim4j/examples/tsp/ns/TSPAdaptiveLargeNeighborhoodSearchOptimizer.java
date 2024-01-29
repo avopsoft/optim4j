@@ -19,6 +19,7 @@ import org.optim4j.ns.completioncond.UnchangedBestFitness;
 public class TSPAdaptiveLargeNeighborhoodSearchOptimizer {
 
 	public static void main(String[] args) throws IOException {
+		System.out.println(Runtime.getRuntime().maxMemory() / 1024/1024);
 		List<Node> nodes = getTravelNodes(args[0]);
 		DistanceMatrix distanceMatrix = DistanceMatrix.getInstance();
 		distanceMatrix.initialize(nodes);
