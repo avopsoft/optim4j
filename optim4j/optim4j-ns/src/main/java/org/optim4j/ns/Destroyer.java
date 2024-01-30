@@ -5,8 +5,8 @@ package org.optim4j.ns;
  * 
  * @author Avijit Basak
  *
- * @param <A> A Solution Agent
- * @param <T> Partially destroyed Agent
+ * @param <A> A valid solution agent
+ * @param <T> Partially destroyed solution agent
  */
 @FunctionalInterface
 public interface Destroyer<A extends Agent, T> {
@@ -15,7 +15,7 @@ public interface Destroyer<A extends Agent, T> {
 	 * Destroys a valid solution agent to create a partially destroyed solution.
 	 * 
 	 * @param agent
-	 * @return
+	 * @return A partially destroyed agent
 	 */
 	T destroy(A agent);
 }

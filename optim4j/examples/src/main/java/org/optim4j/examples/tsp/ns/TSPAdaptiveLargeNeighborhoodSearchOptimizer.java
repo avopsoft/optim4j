@@ -19,7 +19,6 @@ import org.optim4j.ns.completioncond.UnchangedBestFitness;
 public class TSPAdaptiveLargeNeighborhoodSearchOptimizer {
 
 	public static void main(String[] args) throws IOException {
-		System.out.println(Runtime.getRuntime().maxMemory() / 1024/1024);
 		List<Node> nodes = getTravelNodes(args[0]);
 		DistanceMatrix distanceMatrix = DistanceMatrix.getInstance();
 		distanceMatrix.initialize(nodes);
@@ -36,14 +35,9 @@ public class TSPAdaptiveLargeNeighborhoodSearchOptimizer {
 		destroyers.add(new TravelRouteWorstEdgeDestroyer());
 		destroyers.add(new TravelRouteSubPathDestroyer((int) (travelRoute.len() * .2)));
 
-//		AdaptiveScoreBasedRepairerDestroyerManager<TravelRoute, PartiallyDestroyedTravelRoute> adaptiveRepairerDestroyerManager = new AdaptiveScoreBasedRepairerDestroyerManager<>(
-//				repairers, destroyers);
-
-//		RandomRepairerDestroyerManager<TravelRoute, PartiallyDestroyedTravelRoute> repairerDestroyerManager = new RandomRepairerDestroyerManager<>(
-//				repairers, destroyers);
 		AdaptiveLargeNeighborhoodSearchOptimizer<TravelRoute, PartiallyDestroyedTravelRoute> alnsOptimizer = new AdaptiveLargeNeighborhoodSearchOptimizer<>(
 				new SimulatedAnnealingAcceptanceCriteria(Double.MAX_VALUE, .99), new UnchangedBestFitness(5000),
-				new GraphicalObserver("TSP Optimizer", "generations", "cost"), "TSP", repairers, destroyers);
+				repairers, destroyers, new GraphicalObserver("TSP Optimizer", "generations", "cost"));
 		TravelRoute optimizedTravelRoute = alnsOptimizer.optimize(travelRoute);
 		System.out.println(optimizedTravelRoute);
 	}

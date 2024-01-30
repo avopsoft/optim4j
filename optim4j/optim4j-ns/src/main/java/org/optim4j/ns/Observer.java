@@ -8,5 +8,11 @@ package org.optim4j.ns;
  */
 public interface Observer {
 
-	void notify(Agent agent, String name, int generation);
+	/**
+	 * Notify the listener about the current best agent.
+	 * 
+	 * @param agent      Current best agent
+	 * @param generation Generation number
+	 */
+	void notify(Agent agent, int generation);
 }

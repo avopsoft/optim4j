@@ -6,17 +6,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * An acceptance criteria based on predefined threshold.
+ * An acceptance criteria based on old bachelor principle.
  * <p>
- * The neighbor agent is accepted if it has higher fitness than the current
- * agent or if the fitness difference between current and neighbor is lesser
- * than or equal to the threshold value.
+ * It accepts an initial threshold, reduction factor and increment factor as
+ * input. The reduction factor is used to reduce the threshold when the neighbor
+ * is accepted and increased by increment factor when the neighbor is not
+ * acceptable.
  * </p>
  * 
  * @author Avijit Basak
  *
  */
-public class ThresholdAcceptanceCriteria implements AcceptanceCriteria {
+public class OldBachelorAcceptanceCriteria implements AcceptanceCriteria {
 
 	/**
 	 * Threshold to consider in case neighbor agent fitness is lesser than current
@@ -31,27 +32,39 @@ public class ThresholdAcceptanceCriteria implements AcceptanceCriteria {
 	private double reductionFactor;
 
 	/**
-	 * Instance of logger.
+	 * The factor by which the threshold is to be increased in case the fitness
+	 * difference between current and neighbor agent is greater than current
+	 * threshold.
 	 */
-	private static final Logger LOGGER = LoggerFactory.getLogger(ThresholdAcceptanceCriteria.class);
+	private double incrementFactor;
 
 	/**
-	 * Constructs a threshold acceptance criteria based on initial threshold value
-	 * and reduction factor.
+	 * Instance of logger.
+	 */
+	private static final Logger LOGGER = LoggerFactory.getLogger(OldBachelorAcceptanceCriteria.class);
+
+	/**
+	 * Constructs a threshold old bachelor scheme acceptance criteria based on
+	 * initial threshold, reduction factor and increment factor.
 	 * 
 	 * @param initialThreshold initial threshold value for neighbor acceptance
 	 *                         fitness
-	 * @param reductionFactor  threshold reduction factor for each iteration
+	 * @param reductionFactor  threshold reduction factor in case neighbor is
+	 *                         accepted
+	 * @param incrementFactor  threshold increment factor in case neighbor is
+	 *                         unacceptable
 	 */
-	public ThresholdAcceptanceCriteria(double initialThreshold, double reductionFactor) {
+	public OldBachelorAcceptanceCriteria(double initialThreshold, double reductionFactor, double incrementFactor) {
 		this.threshold = initialThreshold;
 		this.reductionFactor = reductionFactor;
+		this.incrementFactor = incrementFactor;
 	}
 
 	/**
 	 * Accepts the neighbor agent if it has better fitness than the current agent or
 	 * the fitness difference is lesser than or equal to current threshold. The
-	 * threshold is also reduced monotonically by predefined reduction factor.
+	 * threshold is reduced by predefined reduction factor if the neighbor is
+	 * acceptable otherwise increased by increment factor.
 	 * 
 	 * @param current  current agent
 	 * @param neighbor neighbor agent
@@ -69,10 +82,12 @@ public class ThresholdAcceptanceCriteria implements AcceptanceCriteria {
 					"Fitness difference between current and neighbor agent is lesser than threshold. Hence neighbor is acceptable.");
 			threshold *= reductionFactor;
 			return true;
+		} else {
+			LOGGER.trace(
+					"Fitness difference between current and neighbor agent is more than threshold. Hence neighbor is unacceptable.");
+			threshold *= incrementFactor;
+			return false;
 		}
-		LOGGER.trace("Neighbor is not acceptable.");
-
-		return false;
 	}
 
 }

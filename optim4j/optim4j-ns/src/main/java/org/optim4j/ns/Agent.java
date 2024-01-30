@@ -11,7 +11,7 @@ public interface Agent extends Comparable<Agent> {
 	/**
 	 * Evaluates the agent to calculate the fitness value.
 	 * 
-	 * @return {@link Double}
+	 * @return the fitness value of the agent
 	 */
 	double evaluate();
 }

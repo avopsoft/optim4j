@@ -25,7 +25,7 @@ public class TSPNeighborhoodSearchOptimizer {
 		NeighborhoodSearchOptimizer<TravelRoute, PartiallyDestroyedTravelRoute> neighborhoodSearchOptimizer = new NeighborhoodSearchOptimizer<>(
 				new SimulatedAnnealingAcceptanceCriteria(Double.MAX_VALUE, .99), new UnchangedBestFitness(50000),
 				new TravelRouteRegretNRepairer(), new TravelRouteWorstEdgeDestroyer(),
-				new GraphicalObserver("TSP Optimizer", "generations", "cost"), "TSP");
+				new GraphicalObserver("TSP Optimizer", "generations", "cost"));
 		TravelRoute optimizedTravelRoute = neighborhoodSearchOptimizer.optimize(travelRoute);
 		System.out.println(optimizedTravelRoute);
 	}

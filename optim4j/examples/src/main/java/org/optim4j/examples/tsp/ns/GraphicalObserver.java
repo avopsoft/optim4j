@@ -98,7 +98,7 @@ public class GraphicalObserver extends JFrame implements Observer {
 	}
 
 	@Override
-	public void notify(Agent agent, String name, int generation) {
+	public void notify(Agent agent, int generation) {
 		addDataPoint("TSP Optimization", new Point(generation, Math.abs(agent.evaluate())));
 		setVisible(true);
 	}

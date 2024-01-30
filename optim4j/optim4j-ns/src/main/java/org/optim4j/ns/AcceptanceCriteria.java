@@ -15,7 +15,7 @@ public interface AcceptanceCriteria {
 	 * 
 	 * @param current   The current solution agent
 	 * @param neighbour Newly generated solution agent.
-	 * @return true or false
+	 * @return If the neighbor solution agent is acceptable or not
 	 */
 	boolean isAcceptable(Agent current, Agent neighbour);
 
