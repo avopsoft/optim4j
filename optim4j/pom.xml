@@ -6,6 +6,6 @@
   <packaging>pom</packaging>
   <modules>
   	<module>optim4j-ns</module>
-  	<module>examples</module>
+  	<module>example-tsp</module>
   </modules>
 </project>
