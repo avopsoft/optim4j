@@ -12,8 +12,8 @@ public interface Repairer<T, A extends Agent> {
 	/**
 	 * Repairs a partially destroyed solution to build a valid solution.
 	 * 
-	 * @param t A partially destroyed solution agent
-	 * @return A valid solution agent
+	 * @param t a partially destroyed solution agent
+	 * @return a valid solution agent
 	 */
 	A repair(T t);
 }

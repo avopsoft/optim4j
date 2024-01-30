@@ -9,8 +9,8 @@ public interface CompletionCondition {
 	/**
 	 * Checks if the optimization process is complete.
 	 * 
-	 * @param agent {@link Agent}
-	 * @return If optimization process is complete or not
+	 * @param agent an {@link Agent}
+	 * @return completion status of the optimization process
 	 */
 	boolean isComplete(Agent agent);
 

@@ -13,8 +13,8 @@ import org.slf4j.LoggerFactory;
  * continues until the completion condition is satisfied.
  * </p>
  *
- * @param <A> A valid solution agent type
- * @param <T> Partially destroyed solution agent type
+ * @param <A> a valid solution agent type
+ * @param <T> partially destroyed solution agent type
  */
 public class NeighborhoodSearchOptimizer<A extends Agent, T> implements Optimizer<A> {
 
@@ -49,13 +49,13 @@ public class NeighborhoodSearchOptimizer<A extends Agent, T> implements Optimize
 	/**
 	 * Constructs an instance of neighborhood search optimizer.
 	 * 
-	 * @param acceptanceCriteria  An acceptance criteria
-	 * @param completionCondition Completion condition of optimization
-	 * @param repairer            Repairer to construct a valid agent from partially
+	 * @param acceptanceCriteria  an acceptance criteria
+	 * @param completionCondition completion condition of optimization
+	 * @param repairer            repairer to construct a valid agent from partially
 	 *                            destroyed agent
-	 * @param destroyer           Destroyer to destroy a valid agent to a partial
+	 * @param destroyer           destroyer to destroy a valid agent to a partial
 	 *                            solution
-	 * @param observers           Observers to get notifications of optimization
+	 * @param observers           observers to get notifications of optimization
 	 *                            process
 	 */
 	public NeighborhoodSearchOptimizer(AcceptanceCriteria acceptanceCriteria, CompletionCondition completionCondition,
@@ -73,8 +73,8 @@ public class NeighborhoodSearchOptimizer<A extends Agent, T> implements Optimize
 	 * iterations following neighborhood search methodology and returns an optimum
 	 * result.
 	 * 
-	 * @param agent A valid solution agent representing a local optima
-	 * @return An optimized solution agent
+	 * @param agent a valid solution agent representing a local optima
+	 * @return an optimized solution agent
 	 */
 	public A optimize(A agent) {
 		LOGGER.info("Input Solution Agent: " + agent.toString());

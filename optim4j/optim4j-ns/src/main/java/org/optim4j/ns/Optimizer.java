@@ -13,8 +13,8 @@ public interface Optimizer<A extends Agent> {
 	 * iterations following neighborhood search methodology and returns an optimum
 	 * result.
 	 * 
-	 * @param agent A valid solution agent
-	 * @return An optimized solution agent
+	 * @param agent a valid solution agent
+	 * @return an optimized solution agent
 	 */
 	A optimize(A agent);
 

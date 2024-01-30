@@ -12,8 +12,8 @@ public interface Destroyer<A extends Agent, T> {
 	/**
 	 * Destroys a valid solution agent to create a partially destroyed solution.
 	 * 
-	 * @param agent A valid solution agent to destroy partially
-	 * @return A partially destroyed agent
+	 * @param agent a valid solution agent to destroy partially
+	 * @return a partially destroyed agent
 	 */
 	T destroy(A agent);
 }

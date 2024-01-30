@@ -52,7 +52,7 @@ public class ThresholdAcceptanceCriteria implements AcceptanceCriteria {
 	 * 
 	 * @param current  current agent
 	 * @param neighbor neighbor agent
-	 * @return true/false
+	 * @return acceptability of the neighbor
 	 */
 	@Override
 	public boolean isAcceptable(Agent current, Agent neighbor) {

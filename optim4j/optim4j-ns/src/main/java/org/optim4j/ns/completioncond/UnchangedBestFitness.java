@@ -28,7 +28,7 @@ public class UnchangedBestFitness implements CompletionCondition {
 	 * Constructs a completion condition based on maximum number of generations with
 	 * unchanged best fitness allowed.
 	 * 
-	 * @param maxNoOfGenerationsWithUnchangedBestFitness Maximum number of
+	 * @param maxNoOfGenerationsWithUnchangedBestFitness maximum number of
 	 *                                                   generations allowed with
 	 *                                                   unchanged best fitness
 	 */
@@ -43,6 +43,9 @@ public class UnchangedBestFitness implements CompletionCondition {
 	 * best fitness. Once value of no of generations with unchanged best fitness
 	 * equals the configured max generation the completion condition is considered
 	 * to be achieved.
+	 * 
+	 * @param agent an {@link Agent}
+	 * @return completion status of the optimization process
 	 */
 	@Override
 	public boolean isComplete(Agent agent) {

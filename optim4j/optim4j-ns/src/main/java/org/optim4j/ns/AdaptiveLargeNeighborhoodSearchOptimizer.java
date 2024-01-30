@@ -21,8 +21,8 @@ import org.slf4j.LoggerFactory;
  * continues until the completion condition is satisfied.
  * </p>
  *
- * @param <A> An input solution agent type
- * @param <T> A partially destroyed solution agent type
+ * @param <A> an input solution agent type
+ * @param <T> a partially destroyed solution agent type
  */
 public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implements Optimizer<A> {
 
@@ -54,18 +54,18 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 	/**
 	 * Constructs an instance of adaptive large neighborhood search optimizer.
 	 * 
-	 * @param acceptanceCriteria  An acceptance criteria for newly generated
+	 * @param acceptanceCriteria  an acceptance criteria for newly generated
 	 *                            solution agent
-	 * @param completionCondition Optimization completion condition
-	 * @param repairers           A {@link List} of repairers to be used for this
+	 * @param completionCondition optimization completion condition
+	 * @param repairers           a {@link List} of repairers to be used for this
 	 *                            optimization
-	 * @param destroyers          A {@link List} of destroyers to be used for this
+	 * @param destroyers          a {@link List} of destroyers to be used for this
 	 *                            optimization
-	 * @param repairerScores      A {@link Map} of repairer's scores for different
+	 * @param repairerScores      a {@link Map} of repairer's scores for different
 	 *                            options
-	 * @param destroyerScores     A {@link Map} of destroyer's scores for different
+	 * @param destroyerScores     a {@link Map} of destroyer's scores for different
 	 *                            options
-	 * @param observers           Optimization observers
+	 * @param observers           optimization observers
 	 */
 	public AdaptiveLargeNeighborhoodSearchOptimizer(AcceptanceCriteria acceptanceCriteria,
 			CompletionCondition completionCondition, List<Repairer<T, A>> repairers, List<Destroyer<A, T>> destroyers,
@@ -80,14 +80,14 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 	/**
 	 * Constructs an instance of adaptive large neighborhood search optimizer.
 	 * 
-	 * @param acceptanceCriteria  An acceptance criteria for newly generated
+	 * @param acceptanceCriteria  an acceptance criteria for newly generated
 	 *                            solution agent
-	 * @param completionCondition Optimization completion condition
-	 * @param repairers           A {@link List} of repairers to be used for this
+	 * @param completionCondition optimization completion condition
+	 * @param repairers           a {@link List} of repairers to be used for this
 	 *                            optimization
-	 * @param destroyers          A {@link List} of destroyers to be used for this
+	 * @param destroyers          a {@link List} of destroyers to be used for this
 	 *                            optimization
-	 * @param observers           Optimization observers
+	 * @param observers           optimization observers
 	 */
 	public AdaptiveLargeNeighborhoodSearchOptimizer(AcceptanceCriteria acceptanceCriteria,
 			CompletionCondition completionCondition, List<Repairer<T, A>> repairers, List<Destroyer<A, T>> destroyers,
@@ -105,8 +105,8 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 	 * each iteration is accepted based on result of acceptance criteria evaluation.
 	 * An optimum solution is returned once the completion condition is met.
 	 * 
-	 * @param agent A valid solution agent representing a local optima
-	 * @return An optimized solution agent
+	 * @param agent a valid solution agent representing a local optima
+	 * @return the optimized solution agent
 	 */
 	public A optimize(A agent) {
 		LOGGER.info("Input Solution Agent: " + agent.toString());
@@ -193,10 +193,10 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		/**
 		 * Initializes repairers and destroyers with user provided scores.
 		 * 
-		 * @param repairers       {@link List} of repairers
-		 * @param destroyers      {@link List} of destroyers
-		 * @param repairerScores  {@link Scores} of repairers
-		 * @param destroyerScores {@link Scores} of destroyers
+		 * @param repairers       a {@link List} of repairers
+		 * @param destroyers      a {@link List} of destroyers
+		 * @param repairerScores  a {@link Scores} of repairers
+		 * @param destroyerScores the {@link Scores} of destroyers
 		 */
 		private ScoreBasedRepairerDestroyerManager(List<Repairer<T, A>> repairers, List<Destroyer<A, T>> destroyers,
 				Scores repairerScores, Scores destroyerScores) {
@@ -246,7 +246,7 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		/**
 		 * Selects a repairer using roulette wheel selection based on their score.
 		 * 
-		 * @return a repairer
+		 * @return selected repairer
 		 */
 		private Repairer<T, A> getRepairer() {
 			LOGGER.trace("Calculate total score for repairers.");
@@ -266,7 +266,7 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		/**
 		 * Selects a destroyer using roulette wheel selection based on their score.
 		 * 
-		 * @return a destroyer
+		 * @return selected destroyer
 		 */
 		private Destroyer<A, T> getDestroyer() {
 			LOGGER.trace("Calculate total score for destroyers.");

@@ -17,7 +17,7 @@ public class GreedyAcceptanceCriteria implements AcceptanceCriteria {
 	 * 
 	 * @param current  current agent
 	 * @param neighbor neighbor agent
-	 * @return If the neighbor is acceptable
+	 * @return acceptability of the neighbor
 	 */
 	public boolean isAcceptable(Agent current, Agent neighbor) {
 		return neighbor.compareTo(current) >= 0;
