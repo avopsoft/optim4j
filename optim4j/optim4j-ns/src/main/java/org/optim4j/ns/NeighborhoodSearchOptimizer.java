@@ -12,11 +12,9 @@ import org.slf4j.LoggerFactory;
  * iteration is accepted based on provided acceptance criteria. The process
  * continues until the completion condition is satisfied.
  * </p>
- * 
- * @author Avijit Basak
  *
- * @param <A> A valid solution agent
- * @param <T> Partially destroyed solution agent
+ * @param <A> A valid solution agent type
+ * @param <T> Partially destroyed solution agent type
  */
 public class NeighborhoodSearchOptimizer<A extends Agent, T> implements Optimizer<A> {
 
@@ -31,7 +29,7 @@ public class NeighborhoodSearchOptimizer<A extends Agent, T> implements Optimize
 	private AcceptanceCriteria acceptanceCriteria;
 
 	/**
-	 * Observer for the optimization process.
+	 * Observers of the optimization process.
 	 */
 	private Observer[] observers;
 
@@ -45,7 +43,7 @@ public class NeighborhoodSearchOptimizer<A extends Agent, T> implements Optimize
 	 */
 	private Destroyer<A, T> destroyer;
 
-	/** instance of logger. **/
+	/** Instance of logger. **/
 	private static final Logger LOGGER = LoggerFactory.getLogger(NeighborhoodSearchOptimizer.class);
 
 	/**
@@ -75,15 +73,15 @@ public class NeighborhoodSearchOptimizer<A extends Agent, T> implements Optimize
 	 * iterations following neighborhood search methodology and returns an optimum
 	 * result.
 	 * 
-	 * @param A A valid solution agent representing a local optima
+	 * @param agent A valid solution agent representing a local optima
 	 * @return An optimized solution agent
 	 */
-	public A optimize(A currentAgent) {
-		LOGGER.info("Input Solution Agent: " + currentAgent.toString());
+	public A optimize(A agent) {
+		LOGGER.info("Input Solution Agent: " + agent.toString());
 		int generation = 0;
-		A bestAgent = currentAgent;
-		while (!completionCondition.isComplete(currentAgent)) {
-			LOGGER.debug("Current Solution Agent: " + currentAgent.toString());
+		A bestAgent = agent;
+		while (!completionCondition.isComplete(agent)) {
+			LOGGER.debug("Current Solution Agent: " + agent.toString());
 
 			// Notify all registered observers.
 			for (Observer observer : observers) {
@@ -91,16 +89,16 @@ public class NeighborhoodSearchOptimizer<A extends Agent, T> implements Optimize
 			}
 
 			// Generate the neighbor.
-			A neighbour = this.repairer.repair(this.destroyer.destroy(currentAgent));
+			A neighbour = this.repairer.repair(this.destroyer.destroy(agent));
 			LOGGER.debug("New neighbor: " + neighbour.toString());
 
 			// Check if neighbor is acceptable compared to current agent.
-			if (acceptanceCriteria.isAcceptable(currentAgent, neighbour)) {
+			if (acceptanceCriteria.isAcceptable(agent, neighbour)) {
 				LOGGER.debug("Neighbor Agent is acceptable.");
-				currentAgent = neighbour;
-				if (currentAgent.compareTo(bestAgent) > 0) {
+				agent = neighbour;
+				if (agent.compareTo(bestAgent) > 0) {
 					LOGGER.debug("Neighbor Agent is better than last best Agent.");
-					bestAgent = currentAgent;
+					bestAgent = agent;
 				}
 			}
 		}

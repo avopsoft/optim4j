@@ -16,18 +16,13 @@ import org.slf4j.LoggerFactory;
  * <p>
  * The implementation accepts a solution agent which is a local optima of the
  * problem domain. The optimization process transforms the same using destroy
- * and repair heuristics over multiple iterations. Destroy and repair heuristic
- * is selected based on it's score during previous iterations. The new solution
- * in each iteration is accepted based on provided acceptance criteria.
- * Depending on neighbor agent fitness and acceptance type the destroy and
- * repair heuristic scores are updated. The process continues until the
- * completion condition is satisfied.
+ * and repair heuristics over multiple iterations. The new solution in each
+ * iteration is accepted based on provided acceptance criteria. The process
+ * continues until the completion condition is satisfied.
  * </p>
- * 
- * @author Avijit Basak
  *
- * @param <A> A valid solution agent
- * @param <T> Partially destroyed solution agent
+ * @param <A> An input solution agent type
+ * @param <T> A partially destroyed solution agent type
  */
 public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implements Optimizer<A> {
 
@@ -42,7 +37,7 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 	private AcceptanceCriteria acceptanceCriteria;
 
 	/**
-	 * Observer for the optimization process.
+	 * Observers of the optimization process.
 	 */
 	private Observer[] observers;
 
@@ -52,16 +47,6 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 	private ScoreBasedRepairerDestroyerManager repairerDestroyerManager;
 
 	/**
-	 * Generation interval by which Score boundary is updated.
-	 */
-	private final int scoreBoundaryUpdateInterval;
-
-	/**
-	 * Default generation interval by which Score boundary is updated.
-	 */
-	private final int DEFAULT_SCORE_BOUNDARY_UPDATE_INTERVAL = 10;
-
-	/**
 	 * Instance of logger.
 	 */
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdaptiveLargeNeighborhoodSearchOptimizer.class);
@@ -69,29 +54,26 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 	/**
 	 * Constructs an instance of adaptive large neighborhood search optimizer.
 	 * 
-	 * @param acceptanceCriteria          An acceptance criteria for newly generated
-	 *                                    solution agent
-	 * @param completionCondition         Optimization completion condition
-	 * @param repairers                   A {@link List} of repairers to be used for
-	 *                                    this optimization
-	 * @param destroyers                  A {@link List} of destroyers to be used
-	 *                                    for this optimization
-	 * @param repairerScores              A {@link Map} of repairer's scores for
-	 *                                    different options
-	 * @param destroyerScores             A {@link Map} of destroyer's scores for
-	 *                                    different options
-	 * @param scoreBoundaryUpdateInterval The generation interval by which the score
-	 *                                    boundaries are updated.
-	 * @param observers                   Optimization observers
+	 * @param acceptanceCriteria  An acceptance criteria for newly generated
+	 *                            solution agent
+	 * @param completionCondition Optimization completion condition
+	 * @param repairers           A {@link List} of repairers to be used for this
+	 *                            optimization
+	 * @param destroyers          A {@link List} of destroyers to be used for this
+	 *                            optimization
+	 * @param repairerScores      A {@link Map} of repairer's scores for different
+	 *                            options
+	 * @param destroyerScores     A {@link Map} of destroyer's scores for different
+	 *                            options
+	 * @param observers           Optimization observers
 	 */
 	public AdaptiveLargeNeighborhoodSearchOptimizer(AcceptanceCriteria acceptanceCriteria,
 			CompletionCondition completionCondition, List<Repairer<T, A>> repairers, List<Destroyer<A, T>> destroyers,
-			Scores repairerScores, Scores destroyerScores, int scoreBoundaryUpdateInterval, Observer... observers) {
+			Scores repairerScores, Scores destroyerScores, Observer... observers) {
 		this.acceptanceCriteria = acceptanceCriteria;
 		this.completionCondition = completionCondition;
 		this.repairerDestroyerManager = new ScoreBasedRepairerDestroyerManager(repairers, destroyers, repairerScores,
 				destroyerScores);
-		this.scoreBoundaryUpdateInterval = scoreBoundaryUpdateInterval;
 		this.observers = observers;
 	}
 
@@ -113,59 +95,60 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		this.acceptanceCriteria = acceptanceCriteria;
 		this.completionCondition = completionCondition;
 		this.repairerDestroyerManager = new ScoreBasedRepairerDestroyerManager(repairers, destroyers);
-		this.scoreBoundaryUpdateInterval = DEFAULT_SCORE_BOUNDARY_UPDATE_INTERVAL;
 		this.observers = observers;
 	}
 
 	/**
 	 * Executes the optimization process. Accepts a solution agent as input
-	 * optimizes the same using destroy and repair process through multiple
-	 * iterations following adaptive neighborhood search methodology and returns an
-	 * optimum result.
+	 * optimizes the same using multiple destroy and repair heuristics based on
+	 * their performance score following ALNS methodology. The new solution agent at
+	 * each iteration is accepted based on result of acceptance criteria evaluation.
+	 * An optimum solution is returned once the completion condition is met.
 	 * 
-	 * @param A A valid solution agent representing a local optima
+	 * @param agent A valid solution agent representing a local optima
 	 * @return An optimized solution agent
 	 */
-	public A optimize(A currentAgent) {
-		LOGGER.info("Input Solution Agent: " + currentAgent.toString());
+	public A optimize(A agent) {
+		LOGGER.info("Input Solution Agent: " + agent.toString());
 		int generation = 0;
-		A bestAgent = currentAgent;
-		while (!completionCondition.isComplete(currentAgent)) {
-			LOGGER.debug("Notify registered observers.");
+		A bestAgent = agent;
+		while (!completionCondition.isComplete(agent)) {
 			for (Observer observer : observers) {
 				observer.notify(bestAgent, generation);
 			}
-
-			if (generation++ % scoreBoundaryUpdateInterval == 0) {
+			if (generation++ % 10 == 0) {
 				LOGGER.info("Update score boundaries");
 				repairerDestroyerManager.updateScoreBoundaries();
 			}
 
 			// Extract repairer and destroyer.
+			LOGGER.trace("Find Destroyer and Repairer.");
 			final Repairer<T, A> repairer = repairerDestroyerManager.getRepairer();
 			LOGGER.debug("Selected repairer : " + repairer);
 			final Destroyer<A, T> destroyer = repairerDestroyerManager.getDestroyer();
 			LOGGER.debug("Selected destroyer : " + destroyer);
 
 			// Find the neighbor solution.
-			final A neighbour = repairer.repair(destroyer.destroy(currentAgent));
+			LOGGER.trace("Find the neighbor solution.");
+			final A neighbour = repairer.repair(destroyer.destroy(agent));
 			LOGGER.debug("New Neighbor: " + neighbour.toString());
 
-			LOGGER.debug("Update repairer and destroyer scores.: " + neighbour.toString());
+			LOGGER.debug("Update repairer and destroyer scores.");
 			// Update the repairer and destroyer scores.
 			if (neighbour.compareTo(bestAgent) >= 0) {
-				LOGGER.debug("Neighbor Agent better than last best Agent. Replace current and best Agent by neighbor.");
+				LOGGER.debug(
+						"Neighbor Agent better than last best Agent. Replace current and best Agent by neighbor Agent.");
 				repairerDestroyerManager.updateScoresWhenNeighborBetterThanBest(repairer, destroyer);
-				currentAgent = neighbour;
+				agent = neighbour;
 				bestAgent = neighbour;
-			} else if (neighbour.compareTo(currentAgent) >= 0) {
-				LOGGER.debug("Neighbor Agent better than current Agent. Replace current Agent by neighbor.");
+			} else if (neighbour.compareTo(agent) >= 0) {
+				LOGGER.debug("Neighbor Agent better than current Agent. Replace current Agent by neighbor Agent.");
 				repairerDestroyerManager.updateScoresWhenNeighborBetterThanCurrent(repairer, destroyer);
-				currentAgent = neighbour;
-			} else if (acceptanceCriteria.isAcceptable(currentAgent, neighbour)) {
-				LOGGER.debug("Neighbor Agent is acceptable.  Replace current Agent by neighbor.");
+				agent = neighbour;
+			} else if (acceptanceCriteria.isAcceptable(agent, neighbour)) {
+				LOGGER.debug("Neighbor Agent is acceptable. Replace current Agent by neighbor Agent.");
 				repairerDestroyerManager.updateScoresWhenNeighborAcceptable(repairer, destroyer);
-				currentAgent = neighbour;
+				agent = neighbour;
 			}
 		}
 		LOGGER.info("Optimum Solution Agent: " + bestAgent.toString());
@@ -173,7 +156,7 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 	}
 
 	/**
-	 * Manages scores of repairers and destroyers.
+	 * Manager of repairers and destroyers and their score.
 	 */
 	private class ScoreBasedRepairerDestroyerManager {
 
@@ -219,8 +202,8 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 				Scores repairerScores, Scores destroyerScores) {
 			this.repairerScores = repairerScores;
 			this.destroyerScores = destroyerScores;
-			repairers.stream().forEach(repairer -> repairerScoreMap.put(repairer, repairerScores.initial));
-			destroyers.stream().forEach(destroyer -> destroyerScoreMap.put(destroyer, destroyerScores.initial));
+			repairers.stream().forEach(repairer -> repairerScoreMap.put(repairer, repairerScores.initialScore));
+			destroyers.stream().forEach(destroyer -> destroyerScoreMap.put(destroyer, destroyerScores.initialScore));
 		}
 
 		/**
@@ -232,8 +215,8 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		private ScoreBasedRepairerDestroyerManager(List<Repairer<T, A>> repairers, List<Destroyer<A, T>> destroyers) {
 			this.repairerScores = new Scores(25.0, 100.0, 75.0, 50.0);
 			this.destroyerScores = new Scores(25.0, 100.0, 75.0, 50.0);
-			repairers.stream().forEach(repairer -> repairerScoreMap.put(repairer, repairerScores.initial));
-			destroyers.stream().forEach(destroyer -> destroyerScoreMap.put(destroyer, destroyerScores.initial));
+			repairers.stream().forEach(repairer -> repairerScoreMap.put(repairer, repairerScores.initialScore));
+			destroyers.stream().forEach(destroyer -> destroyerScoreMap.put(destroyer, destroyerScores.initialScore));
 		}
 
 		/**
@@ -370,9 +353,9 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 			double existingRepairerScore = this.repairerScoreMap.get(repairer);
 			double existingDestroyerScore = this.destroyerScoreMap.get(destroyer);
 			this.repairerScoreMap.put(repairer,
-					repairerScores.incrementWhenNeighborBetterThanBest + existingRepairerScore);
+					repairerScores.scoreIncrementWhenNeighborBetterThanBest + existingRepairerScore);
 			this.destroyerScoreMap.put(destroyer,
-					destroyerScores.incrementWhenNeighborBetterThanBest + existingDestroyerScore);
+					destroyerScores.scoreIncrementWhenNeighborBetterThanBest + existingDestroyerScore);
 		}
 
 		/**
@@ -386,9 +369,9 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 			double existingRepairerScore = this.repairerScoreMap.get(repairer);
 			double existingDestroyerScore = this.destroyerScoreMap.get(destroyer);
 			this.repairerScoreMap.put(repairer,
-					repairerScores.incrementWhenNeighborBetterThanCurrent + existingRepairerScore);
+					repairerScores.scoreIncrementWhenNeighborBetterThanCurrent + existingRepairerScore);
 			this.destroyerScoreMap.put(destroyer,
-					destroyerScores.incrementWhenNeighborBetterThanCurrent + existingDestroyerScore);
+					destroyerScores.scoreIncrementWhenNeighborBetterThanCurrent + existingDestroyerScore);
 		}
 
 		/**
@@ -401,55 +384,60 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		private void updateScoresWhenNeighborAcceptable(Repairer<T, A> repairer, Destroyer<A, T> destroyer) {
 			double existingRepairerScore = this.repairerScoreMap.get(repairer);
 			double existingDestroyerScore = this.destroyerScoreMap.get(destroyer);
-			this.repairerScoreMap.put(repairer, repairerScores.incrementWhenNeighborAcceptable + existingRepairerScore);
+			this.repairerScoreMap.put(repairer,
+					repairerScores.scoreIncrementWhenNeighborAcceptable + existingRepairerScore);
 			this.destroyerScoreMap.put(destroyer,
-					destroyerScores.incrementWhenNeighborAcceptable + existingDestroyerScore);
+					destroyerScores.scoreIncrementWhenNeighborAcceptable + existingDestroyerScore);
 		}
 
 	}
 
 	/**
-	 * Encapsulation of all types of scores for repairers and destroyers.
+	 * An encapsulation of all types of scores for repairers and destroyers.
 	 */
 	public static class Scores {
 
 		/**
 		 * Initial score.
 		 */
-		private double initial;
+		private double initialScore;
 
 		/**
-		 * Increment score when the neighbor is better than best.
+		 * Score increment when the neighbor is better than best agent.
 		 */
-		private double incrementWhenNeighborBetterThanBest;
+		private double scoreIncrementWhenNeighborBetterThanBest;
 
 		/**
-		 * Increment score when the neighbor is better than current.
+		 * Score increment when the neighbor is better than current agent.
 		 */
-		private double incrementWhenNeighborBetterThanCurrent;
+		private double scoreIncrementWhenNeighborBetterThanCurrent;
 
 		/**
-		 * Increment score when the neighbor is acceptable.
+		 * Score increment when the neighbor is not better than either best or current
+		 * agent but is acceptable according to acceptance criteria.
 		 */
-		private double incrementWhenNeighborAcceptable;
+		private double scoreIncrementWhenNeighborAcceptable;
 
 		/**
 		 * Initializes the instance with provided values.
 		 * 
-		 * @param initial                                initial score
-		 * @param incrementWhenNeighborBetterThanBest    score when neighbor better than
-		 *                                               best agent
-		 * @param incrementWhenNeighborBetterThanCurrent score when neighbor better than
-		 *                                               current agent
-		 * @param incrementWhenNeighborIsAcceptable      score when neighbor is
-		 *                                               acceptable
+		 * @param initialScore                                initial score
+		 * @param scoreIncrementWhenNeighborBetterThanBest    score when neighbor better
+		 *                                                    than best agent
+		 * @param scoreIncrementWhenNeighborBetterThanCurrent score when neighbor better
+		 *                                                    than current agent
+		 * @param scoreIncrementWhenNeighborAcceptable        score when neighbor not
+		 *                                                    better than either current
+		 *                                                    or best agent but is still
+		 *                                                    acceptable according to
+		 *                                                    acceptance criteria
 		 */
-		public Scores(double initial, double incrementWhenNeighborBetterThanBest,
-				double incrementWhenNeighborBetterThanCurrent, double incrementWhenNeighborIsAcceptable) {
-			this.initial = initial;
-			this.incrementWhenNeighborBetterThanBest = incrementWhenNeighborBetterThanBest;
-			this.incrementWhenNeighborBetterThanCurrent = incrementWhenNeighborBetterThanCurrent;
-			this.incrementWhenNeighborAcceptable = incrementWhenNeighborIsAcceptable;
+		public Scores(double initialScore, double scoreIncrementWhenNeighborBetterThanBest,
+				double scoreIncrementWhenNeighborBetterThanCurrent, double scoreIncrementWhenNeighborAcceptable) {
+			this.initialScore = initialScore;
+			this.scoreIncrementWhenNeighborBetterThanBest = scoreIncrementWhenNeighborBetterThanBest;
+			this.scoreIncrementWhenNeighborBetterThanCurrent = scoreIncrementWhenNeighborBetterThanCurrent;
+			this.scoreIncrementWhenNeighborAcceptable = scoreIncrementWhenNeighborAcceptable;
 		}
 	}
 

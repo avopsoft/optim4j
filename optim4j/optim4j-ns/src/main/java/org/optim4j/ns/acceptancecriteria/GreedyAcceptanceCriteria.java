@@ -9,9 +9,6 @@ import org.optim4j.ns.Agent;
  * It accepts any neighbor which has higher fitness compared to the current
  * agent.
  * </p>
- * 
- * @author Avijit Basak
- *
  */
 public class GreedyAcceptanceCriteria implements AcceptanceCriteria {
 
@@ -20,10 +17,10 @@ public class GreedyAcceptanceCriteria implements AcceptanceCriteria {
 	 * 
 	 * @param current  current agent
 	 * @param neighbor neighbor agent
-	 * @return true/false
+	 * @return If the neighbor is acceptable
 	 */
-	public boolean isAcceptable(Agent current, Agent neighbour) {
-		return neighbour.compareTo(current) >= 0;
+	public boolean isAcceptable(Agent current, Agent neighbor) {
+		return neighbor.compareTo(current) >= 0;
 	}
 
 }

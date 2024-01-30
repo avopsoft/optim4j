@@ -6,15 +6,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * An acceptance criteria based on predefined threshold.
+ * An acceptance criteria based on threshold value.
  * <p>
  * The neighbor agent is accepted if it has higher fitness than the current
  * agent or if the fitness difference between current and neighbor is lesser
  * than or equal to the threshold value.
  * </p>
- * 
- * @author Avijit Basak
- *
  */
 public class ThresholdAcceptanceCriteria implements AcceptanceCriteria {
 
@@ -50,21 +47,21 @@ public class ThresholdAcceptanceCriteria implements AcceptanceCriteria {
 
 	/**
 	 * Accepts the neighbor agent if it has better fitness than the current agent or
-	 * the fitness difference is lesser than or equal to current threshold. The
-	 * threshold is also reduced monotonically by predefined reduction factor.
+	 * the fitness difference is lesser than or equal to threshold. The threshold is
+	 * also reduced monotonically by predefined reduction factor.
 	 * 
 	 * @param current  current agent
 	 * @param neighbor neighbor agent
 	 * @return true/false
 	 */
 	@Override
-	public boolean isAcceptable(Agent current, Agent neighbour) {
+	public boolean isAcceptable(Agent current, Agent neighbor) {
 		LOGGER.debug("Current agent fitness: {}, Neighbor agent fitness: {} & Threshold: {}", current.evaluate(),
-				neighbour.evaluate(), threshold);
-		if (neighbour.compareTo(current) >= 0) {
+				neighbor.evaluate(), threshold);
+		if (neighbor.compareTo(current) >= 0) {
 			LOGGER.trace("Neighbor better than current agent. Hence neighbor acceptable");
 			return true;
-		} else if (current.compareTo(neighbour) <= threshold) {
+		} else if (current.compareTo(neighbor) <= threshold) {
 			LOGGER.trace(
 					"Fitness difference between current and neighbor agent is lesser than threshold. Hence neighbor is acceptable.");
 			threshold *= reductionFactor;

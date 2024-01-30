@@ -10,12 +10,9 @@ import org.slf4j.LoggerFactory;
  * <p>
  * It accepts an initial threshold, reduction factor and increment factor as
  * input. The reduction factor is used to reduce the threshold when the neighbor
- * is accepted and increased by increment factor when the neighbor is not
+ * is acceptable and increased by increment factor when the neighbor is not
  * acceptable.
  * </p>
- * 
- * @author Avijit Basak
- *
  */
 public class OldBachelorAcceptanceCriteria implements AcceptanceCriteria {
 
@@ -26,8 +23,8 @@ public class OldBachelorAcceptanceCriteria implements AcceptanceCriteria {
 	private double threshold;
 
 	/**
-	 * The factor by which the threshold is to be reduced on each iteration of
-	 * optimization.
+	 * The factor by which the threshold is to be reduced when neighbor solution
+	 * agent is acceptable.
 	 */
 	private double reductionFactor;
 
@@ -71,13 +68,13 @@ public class OldBachelorAcceptanceCriteria implements AcceptanceCriteria {
 	 * @return true/false
 	 */
 	@Override
-	public boolean isAcceptable(Agent current, Agent neighbour) {
+	public boolean isAcceptable(Agent current, Agent neighbor) {
 		LOGGER.debug("Current agent fitness: {}, Neighbor agent fitness: {} & Threshold: {}", current.evaluate(),
-				neighbour.evaluate(), threshold);
-		if (neighbour.compareTo(current) >= 0) {
+				neighbor.evaluate(), threshold);
+		if (neighbor.compareTo(current) >= 0) {
 			LOGGER.trace("Neighbor better than current agent. Hence neighbor acceptable");
 			return true;
-		} else if (current.compareTo(neighbour) <= threshold) {
+		} else if (current.compareTo(neighbor) <= threshold) {
 			LOGGER.trace(
 					"Fitness difference between current and neighbor agent is lesser than threshold. Hence neighbor is acceptable.");
 			threshold *= reductionFactor;

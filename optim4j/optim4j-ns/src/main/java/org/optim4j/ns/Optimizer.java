@@ -1,9 +1,7 @@
 package org.optim4j.ns;
 
 /**
- * Represents optimizer based on neighborhood search.
- * 
- * @author Avijit Basak
+ * Optimizer based on neighborhood search.
  *
  * @param <A> A solution agent.
  */
@@ -15,7 +13,7 @@ public interface Optimizer<A extends Agent> {
 	 * iterations following neighborhood search methodology and returns an optimum
 	 * result.
 	 * 
-	 * @param A A valid solution agent
+	 * @param agent A valid solution agent
 	 * @return An optimized solution agent
 	 */
 	A optimize(A agent);

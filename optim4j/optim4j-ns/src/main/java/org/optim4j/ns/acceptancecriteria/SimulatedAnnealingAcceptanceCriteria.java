@@ -12,9 +12,6 @@ import org.slf4j.LoggerFactory;
  * Otherwise evaluates the acceptance probability using sigmoid function and
  * determines acceptance by random number generation.
  * </p>
- * 
- * @author Avijit Basak
- *
  */
 public class SimulatedAnnealingAcceptanceCriteria implements AcceptanceCriteria {
 
@@ -46,20 +43,21 @@ public class SimulatedAnnealingAcceptanceCriteria implements AcceptanceCriteria 
 	}
 
 	/**
-	 * Accepts the neighbor agent if it has better fitness than current or generated
-	 * random number is lesser than acceptance probability. Acceptance probability
-	 * is computed based on sigmoid function. This process reduces the temperature
-	 * by decay rate in each iteration monotonically.
+	 * Accepts the neighbor agent if it has better fitness than current agent.
+	 * Otherwise its evaluates the acceptance probability using sigmoid function and
+	 * determines acceptance if generated random number is lesser than acceptance
+	 * probability. This process reduces the temperature by decay rate in each
+	 * iteration monotonically.
 	 * 
 	 * @param current  current agent
 	 * @param neighbor neighbor agent
 	 * @return true/false
 	 */
 	@Override
-	public boolean isAcceptable(Agent current, Agent neighbour) {
+	public boolean isAcceptable(Agent current, Agent neighbor) {
 		LOGGER.debug("Current agent fitness: {}, Neighbor agent fitness: {} & Temperature: {}", current.evaluate(),
-				neighbour.evaluate(), temperature);
-		final double neighbourFitness = neighbour.evaluate();
+				neighbor.evaluate(), temperature);
+		final double neighbourFitness = neighbor.evaluate();
 		final double currentFitness = current.evaluate();
 		if (neighbourFitness >= currentFitness) {
 			LOGGER.trace("Neighbor better than current agent. Hence neighbor acceptable");

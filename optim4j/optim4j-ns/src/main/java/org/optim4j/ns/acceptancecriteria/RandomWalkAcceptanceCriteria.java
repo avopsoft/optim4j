@@ -10,9 +10,6 @@ import org.slf4j.LoggerFactory;
  * <p>
  * It accepts any neighbor solution irrespective of it's fitness value.
  * </p>
- * 
- * @author Avijit Basak
- *
  */
 public class RandomWalkAcceptanceCriteria implements AcceptanceCriteria {
 
@@ -29,8 +26,8 @@ public class RandomWalkAcceptanceCriteria implements AcceptanceCriteria {
 	 * @return true/false
 	 */
 	@Override
-	public boolean isAcceptable(Agent current, Agent neighbour) {
-		LOGGER.debug("Current agent fitness: {}, Neighbor agent fitness: {}", current.evaluate(), neighbour.evaluate());
+	public boolean isAcceptable(Agent current, Agent neighbor) {
+		LOGGER.debug("Current agent fitness: {}, Neighbor agent fitness: {}", current.evaluate(), neighbor.evaluate());
 		return true;
 	}
 

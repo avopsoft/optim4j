@@ -1,15 +1,12 @@
 package org.optim4j.ns;
 
 /**
- * Observes the optimization process and captures all notifications.
- * 
- * @author Avijit Basak
- * 
+ * Observer of the optimization process to capture all notifications.
  */
 public interface Observer {
 
 	/**
-	 * Notify the listener about the current best agent.
+	 * Accepts notification of the current best agent.
 	 * 
 	 * @param agent      Current best agent
 	 * @param generation Generation number

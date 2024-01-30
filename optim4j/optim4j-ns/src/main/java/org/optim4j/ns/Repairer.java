@@ -1,9 +1,7 @@
 package org.optim4j.ns;
 
 /**
- * Repairs the partially destroyed solution to build a valid solution agent.
- * 
- * @author Avijit Basak
+ * Repairer of partially destroyed solution to build a valid solution agent.
  *
  * @param <T> Partially destroyed solution agent
  * @param <A> A valid solution agent

@@ -2,9 +2,6 @@ package org.optim4j.ns;
 
 /**
  * An acceptance criteria for newly generated neighbor solution agent.
- * 
- * @author Avijit Basak
- * 
  */
 @FunctionalInterface
 public interface AcceptanceCriteria {
