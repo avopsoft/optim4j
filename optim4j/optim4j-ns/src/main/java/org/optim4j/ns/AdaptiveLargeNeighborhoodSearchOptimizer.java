@@ -20,6 +20,8 @@ import org.slf4j.LoggerFactory;
  * iteration is accepted based on provided acceptance criteria. The process
  * continues until the completion condition is satisfied.
  * </p>
+ * 
+ * @author Avijit Basak
  *
  * @param <A> an input solution agent type
  * @param <T> a partially destroyed solution agent type

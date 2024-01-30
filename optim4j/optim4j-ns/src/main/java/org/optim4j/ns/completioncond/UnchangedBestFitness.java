@@ -6,6 +6,8 @@ import org.optim4j.ns.CompletionCondition;
 /**
  * A completion condition based on unchanged best fitness value for predefined
  * number of generations.
+ * 
+ * @author Avijit Basak
  */
 public class UnchangedBestFitness implements CompletionCondition {
 

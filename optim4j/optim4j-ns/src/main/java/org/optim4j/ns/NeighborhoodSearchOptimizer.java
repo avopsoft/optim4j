@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
  * iteration is accepted based on provided acceptance criteria. The process
  * continues until the completion condition is satisfied.
  * </p>
+ * 
+ * @author Avijit Basak
  *
  * @param <A> a valid solution agent type
  * @param <T> partially destroyed solution agent type

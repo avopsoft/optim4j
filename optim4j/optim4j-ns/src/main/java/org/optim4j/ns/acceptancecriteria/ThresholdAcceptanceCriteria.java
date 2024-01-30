@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
  * agent or if the fitness difference between current and neighbor is lesser
  * than or equal to the threshold value.
  * </p>
+ * 
+ * @author Avijit Basak
  */
 public class ThresholdAcceptanceCriteria implements AcceptanceCriteria {
 

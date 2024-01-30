@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
  * Otherwise evaluates the acceptance probability using sigmoid function and
  * determines acceptance by random number generation.
  * </p>
+ * 
+ * @author Avijit Basak
  */
 public class SimulatedAnnealingAcceptanceCriteria implements AcceptanceCriteria {
 

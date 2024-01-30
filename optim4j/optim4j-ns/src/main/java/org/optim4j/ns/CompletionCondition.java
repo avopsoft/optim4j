@@ -2,6 +2,8 @@ package org.optim4j.ns;
 
 /**
  * Optimization completion condition.
+ * 
+ * @author Avijit Basak
  */
 @FunctionalInterface
 public interface CompletionCondition {

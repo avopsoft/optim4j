@@ -2,6 +2,8 @@ package org.optim4j.ns;
 
 /**
  * Optimizer based on neighborhood search.
+ * 
+ * @author Avijit Basak
  *
  * @param <A> A solution agent.
  */

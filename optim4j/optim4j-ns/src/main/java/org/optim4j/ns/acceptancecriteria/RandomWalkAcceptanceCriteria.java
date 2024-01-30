@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
  * <p>
  * It accepts any neighbor solution irrespective of it's fitness value.
  * </p>
+ * 
+ * @author Avijit Basak
  */
 public class RandomWalkAcceptanceCriteria implements AcceptanceCriteria {
 

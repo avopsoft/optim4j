@@ -2,6 +2,8 @@ package org.optim4j.ns;
 
 /**
  * Observer of the optimization process to capture all notifications.
+ * 
+ * @author Avijit Basak
  */
 public interface Observer {
 

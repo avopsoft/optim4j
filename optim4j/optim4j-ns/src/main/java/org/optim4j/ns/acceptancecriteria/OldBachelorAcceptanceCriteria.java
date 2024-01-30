@@ -13,6 +13,8 @@ import org.slf4j.LoggerFactory;
  * is acceptable and increased by increment factor when the neighbor is not
  * acceptable.
  * </p>
+ * 
+ * @author Avijit Basak
  */
 public class OldBachelorAcceptanceCriteria implements AcceptanceCriteria {
 

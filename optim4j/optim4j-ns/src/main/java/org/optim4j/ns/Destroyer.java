@@ -2,6 +2,8 @@ package org.optim4j.ns;
 
 /**
  * Destroyer of a valid solution agent into a partial solution.
+ * 
+ * @author Avijit Basak
  *
  * @param <A> A valid solution agent
  * @param <T> Partially destroyed solution agent
