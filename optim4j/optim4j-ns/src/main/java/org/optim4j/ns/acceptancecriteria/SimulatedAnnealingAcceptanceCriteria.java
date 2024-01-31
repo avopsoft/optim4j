@@ -62,7 +62,7 @@ public class SimulatedAnnealingAcceptanceCriteria implements AcceptanceCriteria 
 		final double neighbourFitness = neighbor.evaluate();
 		final double currentFitness = current.evaluate();
 		if (neighbourFitness >= currentFitness) {
-			LOGGER.trace("Neighbor better than current agent. Hence neighbor acceptable");
+			LOGGER.debug("Neighbor better than current agent. Hence neighbor acceptable");
 			return true;
 		}
 
@@ -71,7 +71,7 @@ public class SimulatedAnnealingAcceptanceCriteria implements AcceptanceCriteria 
 		 */
 		final double acceptanceProbability = 1 / (1 + Math.exp(-(neighbourFitness - currentFitness) / temperature));
 
-		LOGGER.trace("Generated acceptance probability: {}", acceptanceProbability);
+		LOGGER.debug("Generated acceptance probability: {}", acceptanceProbability);
 
 		/*
 		 * Reduce temperature by decay rate.

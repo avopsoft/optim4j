@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -32,7 +33,7 @@ public class GraphicalObserver extends JFrame implements Observer {
 		add(chartPanel, BorderLayout.CENTER);
 
 		setSize(640, 480);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 
 		setVisible(true);

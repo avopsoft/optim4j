@@ -3,6 +3,7 @@ package org.optim4j.ns;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -58,7 +59,7 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 	 * The default period by which the probabilities need to be updated for
 	 * repairers and destroyers.
 	 */
-	private final int DEFAULT_UPDATE_PERIOD = 10;
+	private static final int DEFAULT_UPDATE_PERIOD = 10;
 
 	/**
 	 * Instance of logger.
@@ -127,7 +128,8 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 	 * @return the optimized solution agent
 	 */
 	public A optimize(A agent) {
-		LOGGER.info("Input Solution Agent: " + agent.toString());
+		LOGGER.info("Input Solution Agent: {}", agent);
+
 		int generation = 0;
 		A bestAgent = agent;
 
@@ -136,6 +138,7 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		 * new neighbor following the ALNS algorithm.
 		 */
 		while (!completionCondition.isComplete(agent)) {
+			LOGGER.debug("Generation: {}", generation);
 			/*
 			 * Notify the observers about the the best agent.
 			 */
@@ -154,16 +157,16 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 			 * Find repairer and destroyer.
 			 */
 			final Repairer<T, A> repairer = repairerDestroyerManager.getRepairer();
-			LOGGER.debug("Selected repairer : " + repairer);
+			LOGGER.debug("Selected repairer: {}", repairer);
 			final Destroyer<A, T> destroyer = repairerDestroyerManager.getDestroyer();
-			LOGGER.debug("Selected destroyer : " + destroyer);
+			LOGGER.debug("Selected destroyer: {}", destroyer);
 
 			/*
 			 * Find the neighbor solution.
 			 */
 			LOGGER.trace("Find the neighbor solution.");
 			final A neighbour = repairer.repair(destroyer.destroy(agent));
-			LOGGER.debug("New Neighbor: " + neighbour.toString());
+			LOGGER.debug("New Neighbor: {}", neighbour);
 
 			LOGGER.debug("Update repairer and destroyer scores.");
 
@@ -187,7 +190,7 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 				agent = neighbour;
 			}
 		}
-		LOGGER.info("Optimum Solution Agent: " + bestAgent.toString());
+		LOGGER.info("Optimum Solution Agent: {}", bestAgent);
 		return bestAgent;
 	}
 
@@ -199,32 +202,32 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		/**
 		 * A {@link Map} of repairer scores.
 		 */
-		private Map<Repairer<T, A>, Double> repairerScoreMap = new HashMap<>();
+		private final Map<Repairer<T, A>, Double> repairerScoreMap = new HashMap<>();
 
 		/**
 		 * A {@link Map} of destroyer scores.
 		 */
-		private Map<Destroyer<A, T>, Double> destroyerScoreMap = new HashMap<>();
+		private final Map<Destroyer<A, T>, Double> destroyerScoreMap = new HashMap<>();
 
 		/**
 		 * A {@link Map} of score boundary and repairers.
 		 */
-		private Map<ScoreBoundary, Repairer<T, A>> repairerScoreBoundaries = new HashMap<>();
+		private final Map<ScoreBoundary, Repairer<T, A>> repairerScoreBoundaries = new HashMap<>();
 
 		/**
 		 * A {@link Map} of score boundary and destroyers.
 		 */
-		private Map<ScoreBoundary, Destroyer<A, T>> destroyerScoreBoundaries = new HashMap<>();
+		private final Map<ScoreBoundary, Destroyer<A, T>> destroyerScoreBoundaries = new HashMap<>();
 
 		/**
 		 * Repairer scores.
 		 */
-		private Scores repairerScores;
+		private final Scores repairerScores;
 
 		/**
 		 * Destroyer scores.
 		 */
-		private Scores destroyerScores;
+		private final Scores destroyerScores;
 
 		/**
 		 * Default initial score of repairers and destroyers.
@@ -286,22 +289,22 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		 * Updates score boundaries for repairers and destroyers.
 		 */
 		private void updateScoreBoundaries() {
-			Set<Repairer<T, A>> repairers = repairerScoreMap.keySet();
-			Set<Destroyer<A, T>> destroyers = destroyerScoreMap.keySet();
+			final Set<Repairer<T, A>> repairers = repairerScoreMap.keySet();
+			final Set<Destroyer<A, T>> destroyers = destroyerScoreMap.keySet();
 
 			LOGGER.trace("Update score boundaries of repairers.");
 			Double cumulativeScore = Double.valueOf(0);
 			for (Repairer<T, A> repairer : repairers) {
-				ScoreBoundary scoreBoundary = new ScoreBoundary(cumulativeScore,
-						cumulativeScore = (cumulativeScore + repairerScoreMap.get(repairer)));
+				cumulativeScore = cumulativeScore + repairerScoreMap.get(repairer);
+				ScoreBoundary scoreBoundary = new ScoreBoundary(cumulativeScore, cumulativeScore);
 				repairerScoreBoundaries.put(scoreBoundary, repairer);
 			}
 
 			LOGGER.trace("Update score boundaries of destroyers.");
 			cumulativeScore = Double.valueOf(0);
 			for (Destroyer<A, T> destroyer : destroyers) {
-				ScoreBoundary scoreBoundary = new ScoreBoundary(cumulativeScore,
-						cumulativeScore = (cumulativeScore + destroyerScoreMap.get(destroyer)));
+				cumulativeScore = cumulativeScore + destroyerScoreMap.get(destroyer);
+				ScoreBoundary scoreBoundary = new ScoreBoundary(cumulativeScore, cumulativeScore);
 				destroyerScoreBoundaries.put(scoreBoundary, destroyer);
 			}
 		}
@@ -313,17 +316,20 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		 */
 		private Repairer<T, A> getRepairer() {
 			LOGGER.trace("Calculate total score for repairers.");
-			Optional<Double> totalScore = repairerScoreBoundaries.keySet().stream()
+			final Optional<Double> totalScore = repairerScoreBoundaries.keySet().stream()
 					.map(scoreBoundary -> scoreBoundary.maxScore).reduce((Double t, Double u) -> t > u ? t : u);
 			LOGGER.trace("Generate random score.");
-			double randomScore = Math.random() * totalScore.get();
-			LOGGER.trace("Generated random score : " + randomScore);
-			for (ScoreBoundary scoreBoundary : repairerScoreBoundaries.keySet()) {
-				if (scoreBoundary.isBetween(randomScore)) {
-					return repairerScoreBoundaries.get(scoreBoundary);
+			if (totalScore.isEmpty()) {
+				throw new IllegalArgumentException("No repairer found.");
+			}
+			final double randomScore = Math.random() * totalScore.get();
+			LOGGER.debug("Generated random score: {}", randomScore);
+			for (Entry<ScoreBoundary, Repairer<T, A>> entry : repairerScoreBoundaries.entrySet()) {
+				if (entry.getKey().isBetween(randomScore)) {
+					return entry.getValue();
 				}
 			}
-			throw new RuntimeException("Invalid random score generated.");
+			throw new IllegalArgumentException("No repairer found.");
 		}
 
 		/**
@@ -333,17 +339,20 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		 */
 		private Destroyer<A, T> getDestroyer() {
 			LOGGER.trace("Calculate total score for destroyers.");
-			Optional<Double> totalScore = destroyerScoreBoundaries.keySet().stream()
+			final Optional<Double> totalScore = destroyerScoreBoundaries.keySet().stream()
 					.map(scoreBoundary -> scoreBoundary.maxScore).reduce((Double t, Double u) -> t > u ? t : u);
 			LOGGER.trace("Generate random score.");
-			double randomScore = Math.random() * totalScore.get();
-			LOGGER.trace("Generated random score : " + randomScore);
-			for (ScoreBoundary scoreBoundary : destroyerScoreBoundaries.keySet()) {
-				if (scoreBoundary.isBetween(randomScore)) {
-					return destroyerScoreBoundaries.get(scoreBoundary);
+			if (totalScore.isEmpty()) {
+				throw new IllegalArgumentException("No destroyer found.");
+			}
+			final double randomScore = Math.random() * totalScore.get();
+			LOGGER.debug("Generated random score: {}", randomScore);
+			for (Entry<ScoreBoundary, Destroyer<A, T>> entry : destroyerScoreBoundaries.entrySet()) {
+				if (entry.getKey().isBetween(randomScore)) {
+					return entry.getValue();
 				}
 			}
-			throw new RuntimeException("Invalid random score generated.");
+			throw new IllegalArgumentException("No destroyer found.");
 		}
 
 		/**
@@ -413,12 +422,10 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		 * @param destroyer selected destroyer
 		 */
 		private void updateScoresWhenNeighborBetterThanBest(Repairer<T, A> repairer, Destroyer<A, T> destroyer) {
-			double existingRepairerScore = this.repairerScoreMap.get(repairer);
-			double existingDestroyerScore = this.destroyerScoreMap.get(destroyer);
 			this.repairerScoreMap.put(repairer,
-					repairerScores.scoreIncrementWhenNeighborBetterThanBest + existingRepairerScore);
+					repairerScores.scoreIncrementWhenNeighborBetterThanBest + this.repairerScoreMap.get(repairer));
 			this.destroyerScoreMap.put(destroyer,
-					destroyerScores.scoreIncrementWhenNeighborBetterThanBest + existingDestroyerScore);
+					destroyerScores.scoreIncrementWhenNeighborBetterThanBest + this.destroyerScoreMap.get(destroyer));
 		}
 
 		/**
@@ -429,12 +436,10 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		 * @param destroyer selected destroyer
 		 */
 		private void updateScoresWhenNeighborBetterThanCurrent(Repairer<T, A> repairer, Destroyer<A, T> destroyer) {
-			double existingRepairerScore = this.repairerScoreMap.get(repairer);
-			double existingDestroyerScore = this.destroyerScoreMap.get(destroyer);
 			this.repairerScoreMap.put(repairer,
-					repairerScores.scoreIncrementWhenNeighborBetterThanCurrent + existingRepairerScore);
-			this.destroyerScoreMap.put(destroyer,
-					destroyerScores.scoreIncrementWhenNeighborBetterThanCurrent + existingDestroyerScore);
+					repairerScores.scoreIncrementWhenNeighborBetterThanCurrent + this.repairerScoreMap.get(repairer));
+			this.destroyerScoreMap.put(destroyer, destroyerScores.scoreIncrementWhenNeighborBetterThanCurrent
+					+ this.destroyerScoreMap.get(destroyer));
 		}
 
 		/**
@@ -445,12 +450,10 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		 * @param destroyer selected destroyer
 		 */
 		private void updateScoresWhenNeighborAcceptable(Repairer<T, A> repairer, Destroyer<A, T> destroyer) {
-			double existingRepairerScore = this.repairerScoreMap.get(repairer);
-			double existingDestroyerScore = this.destroyerScoreMap.get(destroyer);
 			this.repairerScoreMap.put(repairer,
-					repairerScores.scoreIncrementWhenNeighborAcceptable + existingRepairerScore);
+					repairerScores.scoreIncrementWhenNeighborAcceptable + this.repairerScoreMap.get(repairer));
 			this.destroyerScoreMap.put(destroyer,
-					destroyerScores.scoreIncrementWhenNeighborAcceptable + existingDestroyerScore);
+					destroyerScores.scoreIncrementWhenNeighborAcceptable + this.destroyerScoreMap.get(destroyer));
 		}
 
 	}
@@ -463,23 +466,23 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		/**
 		 * Initial score.
 		 */
-		private double initialScore;
+		private final double initialScore;
 
 		/**
 		 * Score increment when the neighbor is better than best agent.
 		 */
-		private double scoreIncrementWhenNeighborBetterThanBest;
+		private final double scoreIncrementWhenNeighborBetterThanBest;
 
 		/**
 		 * Score increment when the neighbor is better than current agent.
 		 */
-		private double scoreIncrementWhenNeighborBetterThanCurrent;
+		private final double scoreIncrementWhenNeighborBetterThanCurrent;
 
 		/**
 		 * Score increment when the neighbor is not better than either best or current
 		 * agent but is acceptable according to acceptance criteria.
 		 */
-		private double scoreIncrementWhenNeighborAcceptable;
+		private final double scoreIncrementWhenNeighborAcceptable;
 
 		/**
 		 * Initializes the instance with provided values.

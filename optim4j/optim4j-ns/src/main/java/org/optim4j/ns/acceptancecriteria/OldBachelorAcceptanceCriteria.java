@@ -74,15 +74,15 @@ public class OldBachelorAcceptanceCriteria implements AcceptanceCriteria {
 		LOGGER.debug("Current agent fitness: {}, Neighbor agent fitness: {} & Threshold: {}", current.evaluate(),
 				neighbor.evaluate(), threshold);
 		if (neighbor.compareTo(current) >= 0) {
-			LOGGER.trace("Neighbor better than current agent. Hence neighbor acceptable");
+			LOGGER.debug("Neighbor better than current agent. Hence neighbor acceptable");
 			return true;
 		} else if (current.compareTo(neighbor) <= threshold) {
-			LOGGER.trace(
+			LOGGER.debug(
 					"Fitness difference between current and neighbor agent is lesser than threshold. Hence neighbor is acceptable.");
 			threshold *= reductionFactor;
 			return true;
 		} else {
-			LOGGER.trace(
+			LOGGER.debug(
 					"Fitness difference between current and neighbor agent is more than threshold. Hence neighbor is unacceptable.");
 			threshold *= incrementFactor;
 			return false;

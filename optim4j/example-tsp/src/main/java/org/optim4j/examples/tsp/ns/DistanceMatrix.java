@@ -4,18 +4,9 @@ import java.util.List;
 
 public class DistanceMatrix {
 
-	private double[][] distances;
+	private final double[][] distances;
 
-	private static DistanceMatrix instance = new DistanceMatrix();
-
-	private DistanceMatrix() {
-	}
-
-	public double getDistance(Node node1, Node node2) {
-		return distances[node1.getIndex() - 1][node2.getIndex() - 1];
-	}
-
-	public void initialize(List<Node> nodes) {
+	public DistanceMatrix(List<Node> nodes) {
 		int len = nodes.size();
 		this.distances = new double[len][len];
 		for (int i = 0; i < len; i++) {
@@ -26,8 +17,8 @@ public class DistanceMatrix {
 		}
 	}
 
-	public static DistanceMatrix getInstance() {
-		return instance;
+	public double getDistance(Node node1, Node node2) {
+		return distances[node1.getIndex() - 1][node2.getIndex() - 1];
 	}
 
 }

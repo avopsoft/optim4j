@@ -79,7 +79,7 @@ public class NeighborhoodSearchOptimizer<A extends Agent, T> implements Optimize
 	 * @return an optimized solution agent
 	 */
 	public A optimize(A agent) {
-		LOGGER.info("Input Solution Agent: " + agent.toString());
+		LOGGER.info("Input Solution Agent: {}", agent);
 		int generation = 0;
 		A bestAgent = agent;
 
@@ -88,7 +88,7 @@ public class NeighborhoodSearchOptimizer<A extends Agent, T> implements Optimize
 		 * new neighbor following the Neighborhood Search algorithm.
 		 */
 		while (!completionCondition.isComplete(agent)) {
-			LOGGER.debug("Current Solution Agent: " + agent.toString());
+			LOGGER.debug("Current Solution Agent: {}", agent);
 
 			/*
 			 * Notify all registered observers.
@@ -101,7 +101,7 @@ public class NeighborhoodSearchOptimizer<A extends Agent, T> implements Optimize
 			 * Generate the neighbor.
 			 */
 			A neighbour = this.repairer.repair(this.destroyer.destroy(agent));
-			LOGGER.debug("New neighbor: " + neighbour.toString());
+			LOGGER.debug("New neighbor: {}", neighbour);
 
 			/*
 			 * Check if neighbor is acceptable compared to current agent. Replace the
@@ -116,7 +116,7 @@ public class NeighborhoodSearchOptimizer<A extends Agent, T> implements Optimize
 				}
 			}
 		}
-		LOGGER.info("Optimized Solution Agent: " + bestAgent.toString());
+		LOGGER.info("Optimized Solution Agent: {}", bestAgent);
 		return bestAgent;
 	}
 

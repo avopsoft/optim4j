@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"org.optim4j.ns"},{"l":"org.optim4j.ns.acceptancecriteria"},{"l":"org.optim4j.ns.completioncond"}]

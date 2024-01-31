@@ -2,12 +2,15 @@ package org.optim4j.examples.tsp.ns;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.optim4j.ns.Destroyer;
 
 public class TravelRouteSubPathDestroyer implements Destroyer<TravelRoute, PartiallyDestroyedTravelRoute> {
 
 	private int noOfEdgesToBeRemoved;
+
+	private Random random = new Random();
 
 	public TravelRouteSubPathDestroyer(int noOfEdgesToBeRemoved) {
 		this.noOfEdgesToBeRemoved = noOfEdgesToBeRemoved;
@@ -18,7 +21,7 @@ public class TravelRouteSubPathDestroyer implements Destroyer<TravelRoute, Parti
 		final List<Node> representation = travelRoute.getRepresentation();
 		int nodeCount = representation.size();
 
-		int startIndex = (int) (Math.random() * representation.size());
+		int startIndex = random.nextInt(representation.size());
 		int endIndex = (startIndex + noOfEdgesToBeRemoved) <= nodeCount - 1 ? startIndex + noOfEdgesToBeRemoved
 				: (startIndex + noOfEdgesToBeRemoved - nodeCount);
 

@@ -3,6 +3,12 @@ package org.optim4j.examples.tsp.ns;
 import java.util.List;
 
 public class TravelRouteFitnessCalculator implements FitnessCalculator {
+	
+	private final DistanceMatrix distanceMatrix;
+	
+	public TravelRouteFitnessCalculator(DistanceMatrix distanceMatrix) {
+		this.distanceMatrix = distanceMatrix;
+	}
 
 	private double calculateTotalDistance(List<Node> nodes) {
 		double totalDistance = 0.0;
@@ -17,10 +23,7 @@ public class TravelRouteFitnessCalculator implements FitnessCalculator {
 	}
 
 	private double calculateNodeDistance(Node node1, Node node2) {
-		DistanceMatrix distanceMatrix = DistanceMatrix.getInstance();
-		double distance = distanceMatrix.getDistance(node1, node2);
-
-		return distance;
+		return distanceMatrix.getDistance(node1, node2);
 	}
 
 	public double calculate(TravelRoute tspAgent) {

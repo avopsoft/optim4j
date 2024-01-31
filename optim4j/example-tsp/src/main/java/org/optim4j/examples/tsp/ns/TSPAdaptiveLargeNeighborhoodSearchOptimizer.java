@@ -15,15 +15,25 @@ import org.optim4j.ns.Destroyer;
 import org.optim4j.ns.Repairer;
 import org.optim4j.ns.acceptancecriteria.SimulatedAnnealingAcceptanceCriteria;
 import org.optim4j.ns.completioncond.UnchangedBestFitness;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+/**
+ * Traveling salesman problem solution using adaptive large neighborhood search
+ * process.
+ * 
+ * @author Avijit Basak
+ */
 public class TSPAdaptiveLargeNeighborhoodSearchOptimizer {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(TSPAdaptiveLargeNeighborhoodSearchOptimizer.class);
 
 	public static void main(String[] args) throws IOException {
 		List<Node> nodes = getTravelNodes(args[0]);
-		DistanceMatrix distanceMatrix = DistanceMatrix.getInstance();
-		distanceMatrix.initialize(nodes);
+		DistanceMatrix distanceMatrix = new DistanceMatrix(nodes);
 		Collections.shuffle(nodes);
-		TravelRoute travelRoute = new TravelRoute(nodes, new TravelRouteFitnessCalculator());
+		TravelRoute travelRoute = new TravelRoute(nodes, new TravelRouteFitnessCalculator(distanceMatrix));
+		LOGGER.info("Initial travel route: {}", travelRoute);
 
 		List<Repairer<PartiallyDestroyedTravelRoute, TravelRoute>> repairers = new ArrayList<>();
 		repairers.add(new TravelRouteBasicGreedyRepairer());
@@ -39,19 +49,19 @@ public class TSPAdaptiveLargeNeighborhoodSearchOptimizer {
 				new SimulatedAnnealingAcceptanceCriteria(Double.MAX_VALUE, .99), new UnchangedBestFitness(5000),
 				repairers, destroyers, new GraphicalObserver("TSP Optimizer", "generations", "cost"));
 		TravelRoute optimizedTravelRoute = alnsOptimizer.optimize(travelRoute);
-		System.out.println(optimizedTravelRoute);
+		LOGGER.info("Optimized route: {}", optimizedTravelRoute);
 	}
 
 	private static List<Node> getTravelNodes(String filePath) throws IOException {
-		List<Node> nodes = new ArrayList<Node>();
+		List<Node> nodes = new ArrayList<>();
 		CSVFormat csvFormat = CSVFormat.DEFAULT.withDelimiter(' ');
 		try (CSVParser parser = new CSVParser(new FileReader(filePath), csvFormat);) {
-			CSVRecord record = null;
+			CSVRecord csvRecord = null;
 			Iterator<CSVRecord> itr = parser.iterator();
 			while (itr.hasNext()) {
-				record = itr.next();
-				Node node = new Node(Integer.parseInt(record.get(0)), Double.parseDouble(record.get(1)),
-						Double.parseDouble(record.get(2)));
+				csvRecord = itr.next();
+				Node node = new Node(Integer.parseInt(csvRecord.get(0)), Double.parseDouble(csvRecord.get(1)),
+						Double.parseDouble(csvRecord.get(2)));
 				nodes.add(node);
 			}
 		}

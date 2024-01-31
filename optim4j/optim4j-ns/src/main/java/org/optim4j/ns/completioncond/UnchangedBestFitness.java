@@ -51,14 +51,14 @@ public class UnchangedBestFitness implements CompletionCondition {
 	 */
 	@Override
 	public boolean isComplete(Agent agent) {
-		double currentFitness = 0.0;
-		if ((currentFitness = agent.evaluate()) != -Double.MAX_VALUE && currentFitness >= lastBestFitness) {
+		double currentFitness = agent.evaluate();
+		if (currentFitness != -Double.MAX_VALUE && currentFitness >= lastBestFitness) {
 			lastBestFitness = currentFitness;
 			noOfGenerationsWithUnchangedBestFitness = 0;
 		} else {
 			noOfGenerationsWithUnchangedBestFitness++;
 		}
-		return noOfGenerationsWithUnchangedBestFitness >= maxNoOfGenerationsWithUnchangedBestFitness ? true : false;
+		return noOfGenerationsWithUnchangedBestFitness >= maxNoOfGenerationsWithUnchangedBestFitness;
 	}
 
 }

@@ -1,31 +1,29 @@
 package org.optim4j.examples.tsp.ns;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.TreeMap;
 
 import org.optim4j.ns.Destroyer;
 
 public class TravelRouteWorstEdgeDestroyer implements Destroyer<TravelRoute, PartiallyDestroyedTravelRoute> {
 
+	private Random random = new Random();
+
 	@Override
 	public PartiallyDestroyedTravelRoute destroy(TravelRoute travelRoute) {
-		int noOfEdgesToBeRemoved = ((int) (Math.random() * travelRoute.len())) % (travelRoute.len() / 2);
+		int noOfEdgesToBeRemoved = random.nextInt(travelRoute.len()) % (travelRoute.len() / 2);
 		final List<Node> removedNodes = new ArrayList<>();
-		final Map<Double, Node> distanceMap = new TreeMap<>(new Comparator<Double>() {
-
-			@Override
-			public int compare(Double o1, Double o2) {
-				if (o2 > o1) {
-					return 1;
-				} else if (o2 < o1) {
-					return -1;
-				} else {
-					return 0;
-				}
+		final Map<Double, Node> distanceMap = new TreeMap<>((Double o1, Double o2) -> {
+			if (o2 > o1) {
+				return 1;
+			} else if (o2 < o1) {
+				return -1;
+			} else {
+				return 0;
 			}
 		});
 		travelRoute.getRepresentation().stream()
