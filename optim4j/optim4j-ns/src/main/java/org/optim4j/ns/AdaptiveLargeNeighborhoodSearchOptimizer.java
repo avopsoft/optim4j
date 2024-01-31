@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
  * An implementation of adaptive large neighborhood search algorithm.
  * 
  * <p>
- * The implementation accepts a solution agent which is a local optima of the
+ * This implementation accepts a solution agent which is a local optima of the
  * problem domain. The optimization process transforms the same using destroy
  * and repair heuristics over multiple iterations. The new solution in each
  * iteration is accepted based on provided acceptance criteria. The process
@@ -47,7 +47,7 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 	/**
 	 * A score manager for destroyers and repairers.
 	 */
-	private final ScoreBasedRepairerDestroyerManager repairerDestroyerManager;
+	private final RepairerDestroyerManager repairerDestroyerManager;
 
 	/**
 	 * The period by which the probabilities need to be updated for repairers and
@@ -56,8 +56,8 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 	private final int updatePeriod;
 
 	/**
-	 * The default period by which the probabilities need to be updated for
-	 * repairers and destroyers.
+	 * Default period by which the probabilities need to be updated for repairers
+	 * and destroyers.
 	 */
 	private static final int DEFAULT_UPDATE_PERIOD = 10;
 
@@ -69,17 +69,14 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 	/**
 	 * Constructs an instance of adaptive large neighborhood search optimizer.
 	 * 
-	 * @param acceptanceCriteria  an acceptance criteria for newly generated
-	 *                            solution agent
+	 * @param acceptanceCriteria  acceptance criteria for newly generated solution
+	 *                            agent
 	 * @param completionCondition optimization completion condition
-	 * @param repairers           a {@link List} of repairers to be used for this
+	 * @param repairers           list of repairers to be used for this optimization
+	 * @param destroyers          list of destroyers to be used for this
 	 *                            optimization
-	 * @param destroyers          a {@link List} of destroyers to be used for this
-	 *                            optimization
-	 * @param repairerScores      a {@link Map} of repairer's scores for different
-	 *                            options
-	 * @param destroyerScores     a {@link Map} of destroyer's scores for different
-	 *                            options
+	 * @param repairerScores      scores for repairers
+	 * @param destroyerScores     scores for destroyers
 	 * @param updatePeriod        period by which the probabilities need to be
 	 *                            updated for repairers and destroyers
 	 * @param observers           optimization observers
@@ -106,7 +103,7 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 
 		this.acceptanceCriteria = acceptanceCriteria;
 		this.completionCondition = completionCondition;
-		this.repairerDestroyerManager = new ScoreBasedRepairerDestroyerManager(repairers, destroyers, repairerScores,
+		this.repairerDestroyerManager = new RepairerDestroyerManager(repairers, destroyers, repairerScores,
 				destroyerScores);
 		this.updatePeriod = updatePeriod;
 		this.observers = observers;
@@ -115,12 +112,11 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 	/**
 	 * Constructs an instance of adaptive large neighborhood search optimizer.
 	 * 
-	 * @param acceptanceCriteria  an acceptance criteria for newly generated
-	 *                            solution agent
+	 * @param acceptanceCriteria  acceptance criteria for newly generated solution
+	 *                            agent
 	 * @param completionCondition optimization completion condition
-	 * @param repairers           a {@link List} of repairers to be used for this
-	 *                            optimization
-	 * @param destroyers          a {@link List} of destroyers to be used for this
+	 * @param repairers           list of repairers to be used for this optimization
+	 * @param destroyers          list of destroyers to be used for this
 	 *                            optimization
 	 * @param observers           optimization observers
 	 */
@@ -141,7 +137,7 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 
 		this.acceptanceCriteria = acceptanceCriteria;
 		this.completionCondition = completionCondition;
-		this.repairerDestroyerManager = new ScoreBasedRepairerDestroyerManager(repairers, destroyers);
+		this.repairerDestroyerManager = new RepairerDestroyerManager(repairers, destroyers);
 		this.updatePeriod = DEFAULT_UPDATE_PERIOD;
 		this.observers = observers;
 	}
@@ -151,7 +147,7 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 	 * optimizes the same using multiple destroy and repair heuristics based on
 	 * their performance score following ALNS methodology. The new solution agent at
 	 * each iteration is accepted based on result of acceptance criteria evaluation.
-	 * An optimum solution is returned once the completion condition is met.
+	 * An optimum solution is returned once the completion condition is satisfied.
 	 * 
 	 * @param agent a valid solution agent representing a local optima
 	 * @return the optimized solution agent
@@ -226,25 +222,25 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 	/**
 	 * Manager of repairers and destroyers and their score.
 	 */
-	private class ScoreBasedRepairerDestroyerManager {
+	private class RepairerDestroyerManager {
 
 		/**
-		 * A {@link Map} of repairer scores.
+		 * Map of repairer scores.
 		 */
 		private final Map<Repairer<T, A>, Double> repairerScoreMap = new HashMap<>();
 
 		/**
-		 * A {@link Map} of destroyer scores.
+		 * Map of destroyer scores.
 		 */
 		private final Map<Destroyer<A, T>, Double> destroyerScoreMap = new HashMap<>();
 
 		/**
-		 * A {@link Map} of score boundary and repairers.
+		 * Map of score boundary and repairers.
 		 */
 		private final Map<ScoreBoundary, Repairer<T, A>> repairerScoreBoundaries = new HashMap<>();
 
 		/**
-		 * A {@link Map} of score boundary and destroyers.
+		 * Map of score boundary and destroyers.
 		 */
 		private final Map<ScoreBoundary, Destroyer<A, T>> destroyerScoreBoundaries = new HashMap<>();
 
@@ -282,12 +278,12 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		/**
 		 * Initializes repairers and destroyers with user provided scores.
 		 * 
-		 * @param repairers       a {@link List} of repairers
-		 * @param destroyers      a {@link List} of destroyers
-		 * @param repairerScores  a {@link Scores} of repairers
-		 * @param destroyerScores the {@link Scores} of destroyers
+		 * @param repairers       list of repairers
+		 * @param destroyers      list of destroyers
+		 * @param repairerScores  scores of repairers
+		 * @param destroyerScores scores of destroyers
 		 */
-		private ScoreBasedRepairerDestroyerManager(List<Repairer<T, A>> repairers, List<Destroyer<A, T>> destroyers,
+		private RepairerDestroyerManager(List<Repairer<T, A>> repairers, List<Destroyer<A, T>> destroyers,
 				Scores repairerScores, Scores destroyerScores) {
 			this.repairerScores = repairerScores;
 			this.destroyerScores = destroyerScores;
@@ -298,10 +294,10 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		/**
 		 * Initializes repairers and destroyers with default scores.
 		 * 
-		 * @param repairers  {@link List} of repairers
-		 * @param destroyers {@link List} of destroyers
+		 * @param repairers  list of repairers
+		 * @param destroyers list of destroyers
 		 */
-		private ScoreBasedRepairerDestroyerManager(List<Repairer<T, A>> repairers, List<Destroyer<A, T>> destroyers) {
+		private RepairerDestroyerManager(List<Repairer<T, A>> repairers, List<Destroyer<A, T>> destroyers) {
 			this.repairerScores = new Scores(DEFAULT_INITIAL_SCORE,
 					DEFAULT_SCORE_INCREMENT_WHEN_NEIGHBOR_BETTER_THAN_BEST,
 					DEFAULT_SCORE_INCREMENT_WHEN_NEIGHBOR_BETTER_THAN_CURRENT,
@@ -341,7 +337,7 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		/**
 		 * Selects a repairer using roulette wheel selection based on their score.
 		 * 
-		 * @return selected repairer
+		 * @return the selected repairer
 		 */
 		private Repairer<T, A> getRepairer() {
 			LOGGER.trace("Calculate total score for repairers.");
@@ -364,7 +360,7 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		/**
 		 * Selects a destroyer using roulette wheel selection based on their score.
 		 * 
-		 * @return selected destroyer
+		 * @return the selected destroyer
 		 */
 		private Destroyer<A, T> getDestroyer() {
 			LOGGER.trace("Calculate total score for destroyers.");
@@ -432,8 +428,8 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 						&& Double.doubleToLongBits(minScore) == Double.doubleToLongBits(other.minScore);
 			}
 
-			private ScoreBasedRepairerDestroyerManager getEnclosingInstance() {
-				return ScoreBasedRepairerDestroyerManager.this;
+			private RepairerDestroyerManager getEnclosingInstance() {
+				return RepairerDestroyerManager.this;
 			}
 
 			@Override
@@ -517,11 +513,11 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		 * Initializes the instance with provided values.
 		 * 
 		 * @param initialScore                                initial score
-		 * @param scoreIncrementWhenNeighborBetterThanBest    score when neighbor better
-		 *                                                    than best agent
-		 * @param scoreIncrementWhenNeighborBetterThanCurrent score when neighbor better
-		 *                                                    than current agent
-		 * @param scoreIncrementWhenNeighborAcceptable        score when neighbor not
+		 * @param scoreIncrementWhenNeighborBetterThanBest    score when neighbor is
+		 *                                                    better than best agent
+		 * @param scoreIncrementWhenNeighborBetterThanCurrent score when neighbor is
+		 *                                                    better than current agent
+		 * @param scoreIncrementWhenNeighborAcceptable        score when neighbor is not
 		 *                                                    better than either current
 		 *                                                    or best agent but is still
 		 *                                                    acceptable according to

@@ -13,7 +13,7 @@ public interface AcceptanceCriteria {
 	 * one.
 	 * 
 	 * @param current   current solution agent
-	 * @param neighbour newly generated solution agent.
+	 * @param neighbour newly generated solution agent
 	 * @return acceptability of the neighbor
 	 */
 	boolean isAcceptable(Agent current, Agent neighbour);

@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 /**
  * An implementation of neighborhood search optimization process.
  * <p>
- * The implementation accepts a solution agent which is a local optima of the
+ * This implementation accepts a solution agent which is a local optima of the
  * problem domain. The optimization process transforms the same using destroy
  * and repair heuristic over multiple iterations. The new solution in each
  * iteration is accepted based on provided acceptance criteria. The process
@@ -53,7 +53,7 @@ public class NeighborhoodSearchOptimizer<A extends Agent, T> implements Optimize
 	/**
 	 * Constructs an instance of neighborhood search optimizer.
 	 * 
-	 * @param acceptanceCriteria  an acceptance criteria
+	 * @param acceptanceCriteria  acceptance criteria for this optimization process
 	 * @param completionCondition completion condition of optimization
 	 * @param repairer            repairer to construct a valid agent from partially
 	 *                            destroyed agent
@@ -86,7 +86,7 @@ public class NeighborhoodSearchOptimizer<A extends Agent, T> implements Optimize
 	 * result.
 	 * 
 	 * @param agent a valid solution agent representing a local optima
-	 * @return an optimized solution agent
+	 * @return the optimized solution agent
 	 */
 	public A optimize(A agent) {
 		LOGGER.info("Input Solution Agent: {}", agent);
