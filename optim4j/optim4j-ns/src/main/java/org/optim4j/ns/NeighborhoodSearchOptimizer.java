@@ -1,5 +1,7 @@
 package org.optim4j.ns;
 
+import java.util.Objects;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,6 +64,14 @@ public class NeighborhoodSearchOptimizer<A extends Agent, T> implements Optimize
 	 */
 	public NeighborhoodSearchOptimizer(AcceptanceCriteria acceptanceCriteria, CompletionCondition completionCondition,
 			Repairer<T, A> repairer, Destroyer<A, T> destroyer, Observer... observers) {
+		/*
+		 * Validate input arguments.
+		 */
+		Objects.requireNonNull(acceptanceCriteria, "Acceptance criteria cannot be Null");
+		Objects.requireNonNull(completionCondition, "Completion condition cannot be Null");
+		Objects.requireNonNull(repairer, "Repairer cannot be Null");
+		Objects.requireNonNull(destroyer, "Destroyer cannot be Null");
+
 		this.acceptanceCriteria = acceptanceCriteria;
 		this.completionCondition = completionCondition;
 		this.repairer = repairer;

@@ -87,6 +87,23 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 	public AdaptiveLargeNeighborhoodSearchOptimizer(AcceptanceCriteria acceptanceCriteria,
 			CompletionCondition completionCondition, List<Repairer<T, A>> repairers, List<Destroyer<A, T>> destroyers,
 			Scores repairerScores, Scores destroyerScores, int updatePeriod, Observer... observers) {
+		/*
+		 * Validate input arguments.
+		 */
+		Objects.requireNonNull(acceptanceCriteria, "Acceptance criteria cannot be Null");
+		Objects.requireNonNull(completionCondition, "Completion condition cannot be Null");
+		Objects.requireNonNull(repairerScores, "repairer scores cannot be Null");
+		Objects.requireNonNull(destroyerScores, "destroyer scores cannot be Null");
+		if (repairers == null || repairers.isEmpty()) {
+			throw new IllegalArgumentException("Need to provide at least one repairer.");
+		}
+		if (destroyers == null || destroyers.isEmpty()) {
+			throw new IllegalArgumentException("Need to provide at least one destroyer.");
+		}
+		if (updatePeriod <= 1) {
+			throw new IllegalArgumentException("Update period cannot be lesser than or equal to 1.");
+		}
+
 		this.acceptanceCriteria = acceptanceCriteria;
 		this.completionCondition = completionCondition;
 		this.repairerDestroyerManager = new ScoreBasedRepairerDestroyerManager(repairers, destroyers, repairerScores,
@@ -110,6 +127,18 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 	public AdaptiveLargeNeighborhoodSearchOptimizer(AcceptanceCriteria acceptanceCriteria,
 			CompletionCondition completionCondition, List<Repairer<T, A>> repairers, List<Destroyer<A, T>> destroyers,
 			Observer... observers) {
+		/*
+		 * Validate input arguments.
+		 */
+		Objects.requireNonNull(acceptanceCriteria, "Acceptance criteria cannot be Null");
+		Objects.requireNonNull(completionCondition, "Completion condition cannot be Null");
+		if (repairers == null || repairers.isEmpty()) {
+			throw new IllegalArgumentException("Need to provide at least one repairer.");
+		}
+		if (destroyers == null || destroyers.isEmpty()) {
+			throw new IllegalArgumentException("Need to provide at least one destroyer.");
+		}
+
 		this.acceptanceCriteria = acceptanceCriteria;
 		this.completionCondition = completionCondition;
 		this.repairerDestroyerManager = new ScoreBasedRepairerDestroyerManager(repairers, destroyers);
