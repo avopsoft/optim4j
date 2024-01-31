@@ -100,8 +100,8 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		if (destroyers == null || destroyers.isEmpty()) {
 			throw new IllegalArgumentException("Need to provide at least one destroyer.");
 		}
-		if (updatePeriod <= 1) {
-			throw new IllegalArgumentException("Update period cannot be lesser than or equal to 1.");
+		if (updatePeriod < DEFAULT_UPDATE_PERIOD) {
+			throw new IllegalArgumentException("Update period cannot be lesser than " + DEFAULT_UPDATE_PERIOD);
 		}
 
 		this.acceptanceCriteria = acceptanceCriteria;
