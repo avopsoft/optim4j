@@ -130,6 +130,11 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		LOGGER.info("Input Solution Agent: " + agent.toString());
 		int generation = 0;
 		A bestAgent = agent;
+
+		/*
+		 * Check if the completion condition is satisfied. If not continue to generate a
+		 * new neighbor following the ALNS algorithm.
+		 */
 		while (!completionCondition.isComplete(agent)) {
 			/*
 			 * Notify the observers about the the best agent.
@@ -146,9 +151,8 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 			}
 
 			/*
-			 * Extract repairer and destroyer.
+			 * Find repairer and destroyer.
 			 */
-			LOGGER.trace("Find Destroyer and Repairer.");
 			final Repairer<T, A> repairer = repairerDestroyerManager.getRepairer();
 			LOGGER.debug("Selected repairer : " + repairer);
 			final Destroyer<A, T> destroyer = repairerDestroyerManager.getDestroyer();
@@ -164,7 +168,8 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 			LOGGER.debug("Update repairer and destroyer scores.");
 
 			/*
-			 * Update the repairer and destroyer scores.
+			 * Update the repairer and destroyer scores and replace the new current agent
+			 * and best agent by new neighbor based on it's score and acceptability.
 			 */
 			if (neighbour.compareTo(bestAgent) >= 0) {
 				LOGGER.debug(
@@ -222,6 +227,27 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		private Scores destroyerScores;
 
 		/**
+		 * Default initial score of repairers and destroyers.
+		 */
+		private static final double DEFAULT_INITIAL_SCORE = 25;
+
+		/**
+		 * Default score increment when neighbor is better than best agent.
+		 */
+		private static final double DEFAULT_SCORE_INCREMENT_WHEN_NEIGHBOR_BETTER_THAN_BEST = 100;
+
+		/**
+		 * Default score increment when neighbor is better than current agent.
+		 */
+		private static final double DEFAULT_SCORE_INCREMENT_WHEN_NEIGHBOR_BETTER_THAN_CURRENT = 75;
+
+		/**
+		 * Default score increment when neighbor is not better than current or best
+		 * agent but still acceptable according to acceptance criteria.
+		 */
+		private static final double DEFAULT_SCORE_INCREMENT_WHEN_NEIGHBOR_ACCEPTABLE = 50;
+
+		/**
 		 * Initializes repairers and destroyers with user provided scores.
 		 * 
 		 * @param repairers       a {@link List} of repairers
@@ -244,8 +270,14 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		 * @param destroyers {@link List} of destroyers
 		 */
 		private ScoreBasedRepairerDestroyerManager(List<Repairer<T, A>> repairers, List<Destroyer<A, T>> destroyers) {
-			this.repairerScores = new Scores(25.0, 100.0, 75.0, 50.0);
-			this.destroyerScores = new Scores(25.0, 100.0, 75.0, 50.0);
+			this.repairerScores = new Scores(DEFAULT_INITIAL_SCORE,
+					DEFAULT_SCORE_INCREMENT_WHEN_NEIGHBOR_BETTER_THAN_BEST,
+					DEFAULT_SCORE_INCREMENT_WHEN_NEIGHBOR_BETTER_THAN_CURRENT,
+					DEFAULT_SCORE_INCREMENT_WHEN_NEIGHBOR_ACCEPTABLE);
+			this.destroyerScores = new Scores(DEFAULT_INITIAL_SCORE,
+					DEFAULT_SCORE_INCREMENT_WHEN_NEIGHBOR_BETTER_THAN_BEST,
+					DEFAULT_SCORE_INCREMENT_WHEN_NEIGHBOR_BETTER_THAN_CURRENT,
+					DEFAULT_SCORE_INCREMENT_WHEN_NEIGHBOR_ACCEPTABLE);
 			repairers.stream().forEach(repairer -> repairerScoreMap.put(repairer, repairerScores.initialScore));
 			destroyers.stream().forEach(destroyer -> destroyerScoreMap.put(destroyer, destroyerScores.initialScore));
 		}

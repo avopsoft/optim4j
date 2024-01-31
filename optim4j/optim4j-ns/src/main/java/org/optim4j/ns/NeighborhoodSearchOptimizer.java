@@ -82,6 +82,11 @@ public class NeighborhoodSearchOptimizer<A extends Agent, T> implements Optimize
 		LOGGER.info("Input Solution Agent: " + agent.toString());
 		int generation = 0;
 		A bestAgent = agent;
+
+		/*
+		 * Check if the completion condition is satisfied. If not continue to generate a
+		 * new neighbor following the Neighborhood Search algorithm.
+		 */
 		while (!completionCondition.isComplete(agent)) {
 			LOGGER.debug("Current Solution Agent: " + agent.toString());
 
@@ -99,7 +104,8 @@ public class NeighborhoodSearchOptimizer<A extends Agent, T> implements Optimize
 			LOGGER.debug("New neighbor: " + neighbour.toString());
 
 			/*
-			 * Check if neighbor is acceptable compared to current agent.
+			 * Check if neighbor is acceptable compared to current agent. Replace the
+			 * current agent and best agent depending on it's fitness and acceptability.
 			 */
 			if (acceptanceCriteria.isAcceptable(agent, neighbour)) {
 				LOGGER.debug("Neighbor Agent is acceptable.");
