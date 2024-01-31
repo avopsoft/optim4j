@@ -9,7 +9,7 @@
 
 	<name>optim4j</name>
 	<description>A library for optimization using neighborhood search and it's variants in java</description>
-
+	<inceptionYear>2024</inceptionYear>
 	<licenses>
 		<license>
 			<name>Apache License, Version 2.0</name>
@@ -19,8 +19,12 @@
 	</licenses>
 
 	<scm>
-		<url>https://github.com/avijit-basak/optim4j</url>
+		<url>https://github.com/avopsoft/optim4j</url>
 	</scm>
+
+	<properties>
+		<slf4j.version>1.7.32</slf4j.version>
+	</properties>
 
 	<modules>
 		<module>optim4j-ns</module>
