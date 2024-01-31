@@ -85,16 +85,22 @@ public class NeighborhoodSearchOptimizer<A extends Agent, T> implements Optimize
 		while (!completionCondition.isComplete(agent)) {
 			LOGGER.debug("Current Solution Agent: " + agent.toString());
 
-			// Notify all registered observers.
+			/*
+			 * Notify all registered observers.
+			 */
 			for (Observer observer : observers) {
 				observer.notify(bestAgent, generation++);
 			}
 
-			// Generate the neighbor.
+			/*
+			 * Generate the neighbor.
+			 */
 			A neighbour = this.repairer.repair(this.destroyer.destroy(agent));
 			LOGGER.debug("New neighbor: " + neighbour.toString());
 
-			// Check if neighbor is acceptable compared to current agent.
+			/*
+			 * Check if neighbor is acceptable compared to current agent.
+			 */
 			if (acceptanceCriteria.isAcceptable(agent, neighbour)) {
 				LOGGER.debug("Neighbor Agent is acceptable.");
 				agent = neighbour;
