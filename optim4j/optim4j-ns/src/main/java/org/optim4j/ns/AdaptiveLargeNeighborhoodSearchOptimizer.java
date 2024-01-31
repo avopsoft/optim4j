@@ -80,6 +80,12 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 	 * @param updatePeriod        period by which the probabilities need to be
 	 *                            updated for repairers and destroyers
 	 * @param observers           optimization observers
+	 * 
+	 * @throws NullPointerException     if acceptance criteria or completion
+	 *                                  condition or repairer scores or destroyer
+	 *                                  scores is null
+	 * @throws IllegalArgumentException if list of repairers or destroyers is null
+	 *                                  or empty
 	 */
 	public AdaptiveLargeNeighborhoodSearchOptimizer(AcceptanceCriteria acceptanceCriteria,
 			CompletionCondition completionCondition, List<Repairer<T, A>> repairers, List<Destroyer<A, T>> destroyers,
@@ -119,6 +125,11 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 	 * @param destroyers          list of destroyers to be used for this
 	 *                            optimization
 	 * @param observers           optimization observers
+	 * 
+	 * @throws NullPointerException     if acceptance criteria or completion
+	 *                                  condition is null
+	 * @throws IllegalArgumentException if list of repairers or destroyers is null
+	 *                                  or empty
 	 */
 	public AdaptiveLargeNeighborhoodSearchOptimizer(AcceptanceCriteria acceptanceCriteria,
 			CompletionCondition completionCondition, List<Repairer<T, A>> repairers, List<Destroyer<A, T>> destroyers,
@@ -338,6 +349,8 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		 * Selects a repairer using roulette wheel selection based on their score.
 		 * 
 		 * @return the selected repairer
+		 * 
+		 * @throws IllegalArgumentException if list of repairers is empty
 		 */
 		private Repairer<T, A> getRepairer() {
 			LOGGER.trace("Calculate total score for repairers.");
@@ -361,6 +374,8 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		 * Selects a destroyer using roulette wheel selection based on their score.
 		 * 
 		 * @return the selected destroyer
+		 * 
+		 * @throws IllegalArgumentException if list of destroyers is empty
 		 */
 		private Destroyer<A, T> getDestroyer() {
 			LOGGER.trace("Calculate total score for destroyers.");

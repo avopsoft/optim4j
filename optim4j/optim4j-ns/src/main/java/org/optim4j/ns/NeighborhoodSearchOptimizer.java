@@ -53,14 +53,17 @@ public class NeighborhoodSearchOptimizer<A extends Agent, T> implements Optimize
 	/**
 	 * Constructs an instance of neighborhood search optimizer.
 	 * 
-	 * @param acceptanceCriteria  acceptance criteria for this optimization process
-	 * @param completionCondition completion condition of optimization
+	 * @param acceptanceCriteria  acceptance criteria for newly generated solution
+	 *                            agent
+	 * @param completionCondition optimization completion condition
 	 * @param repairer            repairer to construct a valid agent from partially
 	 *                            destroyed agent
 	 * @param destroyer           destroyer to destroy a valid agent to a partial
 	 *                            solution
 	 * @param observers           observers to get notifications of optimization
 	 *                            process
+	 * 
+	 * @throws NullPointerException if any input argument is null
 	 */
 	public NeighborhoodSearchOptimizer(AcceptanceCriteria acceptanceCriteria, CompletionCondition completionCondition,
 			Repairer<T, A> repairer, Destroyer<A, T> destroyer, Observer... observers) {

@@ -49,7 +49,7 @@ public class OldBachelorAcceptanceCriteria implements AcceptanceCriteria {
 	 * @param initialThreshold initial threshold value for neighbor acceptance
 	 *                         fitness
 	 * @param reductionFactor  threshold reduction factor in case neighbor is
-	 *                         accepted
+	 *                         acceptable
 	 * @param incrementFactor  threshold increment factor in case neighbor is
 	 *                         unacceptable
 	 */
