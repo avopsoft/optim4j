@@ -46,7 +46,7 @@ public class TSPAdaptiveLargeNeighborhoodSearchOptimizer {
 		destroyers.add(new TravelRouteSubPathDestroyer((int) (travelRoute.len() * .2)));
 
 		AdaptiveLargeNeighborhoodSearchOptimizer<TravelRoute, PartiallyDestroyedTravelRoute> alnsOptimizer = new AdaptiveLargeNeighborhoodSearchOptimizer<>(
-				new SimulatedAnnealingAcceptanceCriteria(Double.MAX_VALUE, .99), new UnchangedBestFitness(5000),
+				new SimulatedAnnealingAcceptanceCriteria(100000, .99), new UnchangedBestFitness(5000),
 				repairers, destroyers, new GraphicalObserver("TSP Optimizer", "generations", "cost"));
 		TravelRoute optimizedTravelRoute = alnsOptimizer.optimize(travelRoute);
 		LOGGER.info("Optimized route: {}", optimizedTravelRoute);

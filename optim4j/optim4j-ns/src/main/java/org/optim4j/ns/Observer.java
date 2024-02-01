@@ -10,9 +10,9 @@ public interface Observer {
 	/**
 	 * Accepts notification of the current best agent.
 	 * 
-	 * @param bestAgent      current best agent
-	 * @param currentAgent TODO
-	 * @param generation generation number
+	 * @param bestAgent    current best agent
+	 * @param currentAgent current agent
+	 * @param generation   generation number
 	 */
 	void notify(Agent bestAgent, Agent currentAgent, int generation);
 }
