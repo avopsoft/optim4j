@@ -10,11 +10,6 @@
 	<artifactId>optim4j-ns</artifactId>
 	<description>This module provides optimization libraries based on neighborhood search.</description>
 
-	<properties>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
-	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.slf4j</groupId>
