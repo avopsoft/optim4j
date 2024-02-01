@@ -179,7 +179,7 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 			 * Notify the observers about the the best agent.
 			 */
 			for (Observer observer : observers) {
-				observer.notify(bestAgent, generation);
+				observer.notify(bestAgent, agent, generation);
 			}
 			/*
 			 * If generation is divisible by update period then update score boundaries.
@@ -329,19 +329,23 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 			final Set<Destroyer<A, T>> destroyers = destroyerScoreMap.keySet();
 
 			LOGGER.trace("Update score boundaries of repairers.");
-			Double cumulativeScore = Double.valueOf(0);
+			Double minScore = Double.valueOf(0);
+			Double maxScore = Double.valueOf(0);
 			for (Repairer<T, A> repairer : repairers) {
-				cumulativeScore = cumulativeScore + repairerScoreMap.get(repairer);
-				ScoreBoundary scoreBoundary = new ScoreBoundary(cumulativeScore, cumulativeScore);
+				maxScore = minScore + repairerScoreMap.get(repairer);
+				ScoreBoundary scoreBoundary = new ScoreBoundary(minScore, maxScore);
 				repairerScoreBoundaries.put(scoreBoundary, repairer);
+				minScore = maxScore;
 			}
 
 			LOGGER.trace("Update score boundaries of destroyers.");
-			cumulativeScore = Double.valueOf(0);
+			minScore = Double.valueOf(0);
+			maxScore = Double.valueOf(0);
 			for (Destroyer<A, T> destroyer : destroyers) {
-				cumulativeScore = cumulativeScore + destroyerScoreMap.get(destroyer);
-				ScoreBoundary scoreBoundary = new ScoreBoundary(cumulativeScore, cumulativeScore);
+				maxScore = minScore + destroyerScoreMap.get(destroyer);
+				ScoreBoundary scoreBoundary = new ScoreBoundary(minScore, maxScore);
 				destroyerScoreBoundaries.put(scoreBoundary, destroyer);
+				minScore = maxScore;
 			}
 		}
 

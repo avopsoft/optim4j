@@ -107,7 +107,7 @@ public class NeighborhoodSearchOptimizer<A extends Agent, T> implements Optimize
 			 * Notify all registered observers.
 			 */
 			for (Observer observer : observers) {
-				observer.notify(bestAgent, generation++);
+				observer.notify(bestAgent, agent, generation++);
 			}
 
 			/*
