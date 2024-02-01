@@ -40,6 +40,12 @@ public class SimulatedAnnealingAcceptanceCriteria implements AcceptanceCriteria 
 	 * @param decayRate          decay rate of temperature in each iteration
 	 */
 	public SimulatedAnnealingAcceptanceCriteria(double initialTemperature, double decayRate) {
+		if (initialTemperature <= 1) {
+			throw new IllegalArgumentException("Initial temperature should be greater than 1.");
+		}
+		if (!(decayRate > 0 && decayRate < 1)) {
+			throw new IllegalArgumentException("recay rate factor should be between 0 and 1.");
+		}
 		this.temperature = initialTemperature;
 		this.decayRate = decayRate;
 	}

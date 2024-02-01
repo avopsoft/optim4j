@@ -43,6 +43,12 @@ public class ThresholdAcceptanceCriteria implements AcceptanceCriteria {
 	 * @param reductionFactor  threshold reduction factor for each iteration
 	 */
 	public ThresholdAcceptanceCriteria(double initialThreshold, double reductionFactor) {
+		if (initialThreshold <= 0) {
+			throw new IllegalArgumentException("Initial threshold should be positive number.");
+		}
+		if (!(reductionFactor > 0 && reductionFactor < 1)) {
+			throw new IllegalArgumentException("Reduction factor should be between 0 and 1.");
+		}
 		this.threshold = initialThreshold;
 		this.reductionFactor = reductionFactor;
 	}
