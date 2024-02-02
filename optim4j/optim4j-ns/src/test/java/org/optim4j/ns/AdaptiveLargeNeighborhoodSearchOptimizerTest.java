@@ -30,27 +30,6 @@ class AdaptiveLargeNeighborhoodSearchOptimizerTest {
 
 	}
 
-	private class OptimizationLogger implements Observer<Solution, PartiallyDestroyedSolution> {
-
-		private int generation;
-
-		private final Logger LOGGER = LoggerFactory.getLogger(OptimizationLogger.class);
-
-		@Override
-		public void notify(Agent bestAgent, Agent currentAgent, AcceptanceCriteria acceptanceCriteria,
-				Repairer<PartiallyDestroyedSolution, Solution> selectedRepairer,
-				Destroyer<Solution, PartiallyDestroyedSolution> selectedDestroyer) {
-			generation++;
-			LOGGER.info("Current generation: {}", generation);
-			LOGGER.info("Best agent fitness: {}", bestAgent.evaluate());
-			LOGGER.info("Current agent fitness: {}", currentAgent.evaluate());
-			LOGGER.info("Acceptance criteria: {}", acceptanceCriteria);
-			LOGGER.info("Selected repairer: {}", selectedRepairer);
-			LOGGER.info("Selected destroyer: {}", selectedDestroyer);
-		}
-
-	}
-
 	@Test
 	@DisplayName("Test constructor with all valid parameters.")
 	void testAdaptiveLargeNeighborhoodSearchOptimizerConstructorWithValidParameters() {
@@ -261,7 +240,9 @@ class AdaptiveLargeNeighborhoodSearchOptimizerTest {
 					public boolean isComplete(Agent agent) {
 						return generation++ == 10;
 					}
-				}, repairers, destroyers, new OptimizationLogger());
+				}, repairers, destroyers,
+				(bestAgent, currentAgent, acceptanceCriteria, selectedRepairer, selectedDestroyer) -> {
+				});
 		Assertions.assertDoesNotThrow(new Executable() {
 
 			@Override
