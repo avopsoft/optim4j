@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author Avijit Basak
  */
-public class SimulatedAnnealingAcceptanceCriteria implements AcceptanceCriteria {
+public final class SimulatedAnnealingAcceptanceCriteria implements AcceptanceCriteria {
 
 	/**
 	 * Temperature of annealing process.
@@ -85,6 +85,24 @@ public class SimulatedAnnealingAcceptanceCriteria implements AcceptanceCriteria 
 		temperature *= decayRate;
 
 		return Math.random() <= acceptanceProbability;
+	}
+
+	/**
+	 * Returns current temperature.
+	 * 
+	 * @return temperature
+	 */
+	public double getTemperature() {
+		return temperature;
+	}
+
+	/**
+	 * Returns the string representation along with current temperature of the
+	 * simulated annealing acceptance criteria.
+	 */
+	@Override
+	public String toString() {
+		return "SimulatedAnnealingAcceptanceCriteria [temperature=" + temperature + "]";
 	}
 
 }

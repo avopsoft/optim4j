@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author Avijit Basak
  */
-public class ThresholdAcceptanceCriteria implements AcceptanceCriteria {
+public final class ThresholdAcceptanceCriteria implements AcceptanceCriteria {
 
 	/**
 	 * Threshold to consider in case neighbor agent fitness is lesser than current
@@ -78,6 +78,24 @@ public class ThresholdAcceptanceCriteria implements AcceptanceCriteria {
 		LOGGER.debug("Neighbor is not acceptable.");
 
 		return false;
+	}
+
+	/**
+	 * Returns current threshold value.
+	 * 
+	 * @return threshold
+	 */
+	public double getThreshold() {
+		return threshold;
+	}
+
+	/**
+	 * Returns the string representation along with current threshold of threshold acceptance
+	 * criteria.
+	 */
+	@Override
+	public String toString() {
+		return "ThresholdAcceptanceCriteria [threshold=" + threshold + "]";
 	}
 
 }

@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author Avijit Basak
  */
-public class OldBachelorAcceptanceCriteria implements AcceptanceCriteria {
+public final class OldBachelorAcceptanceCriteria implements AcceptanceCriteria {
 
 	/**
 	 * Threshold to consider in case neighbor agent fitness is lesser than current
@@ -96,6 +96,24 @@ public class OldBachelorAcceptanceCriteria implements AcceptanceCriteria {
 			threshold *= incrementFactor;
 			return false;
 		}
+	}
+
+	/**
+	 * Returns current threshold value.
+	 * 
+	 * @return threshold
+	 */
+	public double getThreshold() {
+		return threshold;
+	}
+
+	/**
+	 * Returns the string representation along with current threshold value of old
+	 * bachelor acceptance criteria.
+	 */
+	@Override
+	public String toString() {
+		return "OldBachelorAcceptanceCriteria [threshold=" + threshold + "]";
 	}
 
 }

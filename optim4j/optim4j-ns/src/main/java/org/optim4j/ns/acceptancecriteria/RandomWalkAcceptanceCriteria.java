@@ -33,4 +33,12 @@ public class RandomWalkAcceptanceCriteria implements AcceptanceCriteria {
 		return true;
 	}
 
+	/**
+	 * Returns the string representation of random walk acceptance criteria.
+	 */
+	@Override
+	public String toString() {
+		return "RandomWalkAcceptanceCriteria []";
+	}
+
 }

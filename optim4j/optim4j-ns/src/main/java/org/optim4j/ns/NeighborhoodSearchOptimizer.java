@@ -33,9 +33,9 @@ public class NeighborhoodSearchOptimizer<A extends Agent, T> implements Optimize
 	private AcceptanceCriteria acceptanceCriteria;
 
 	/**
-	 * Observers of the optimization process.
+	 * Observer of the optimization process.
 	 */
-	private Observer[] observers;
+	private Observer<A, T> observer;
 
 	/**
 	 * Repairer to construct a valid solution agent from partially destroyed agent.
@@ -60,13 +60,13 @@ public class NeighborhoodSearchOptimizer<A extends Agent, T> implements Optimize
 	 *                            destroyed agent
 	 * @param destroyer           destroyer to destroy a valid agent to a partial
 	 *                            solution
-	 * @param observers           observers to get notifications of optimization
+	 * @param observer            observer to get notifications of optimization
 	 *                            process
 	 * 
 	 * @throws NullPointerException if any input argument is null
 	 */
 	public NeighborhoodSearchOptimizer(AcceptanceCriteria acceptanceCriteria, CompletionCondition completionCondition,
-			Repairer<T, A> repairer, Destroyer<A, T> destroyer, Observer... observers) {
+			Repairer<T, A> repairer, Destroyer<A, T> destroyer, Observer<A, T> observer) {
 		/*
 		 * Validate input arguments.
 		 */
@@ -79,7 +79,7 @@ public class NeighborhoodSearchOptimizer<A extends Agent, T> implements Optimize
 		this.completionCondition = completionCondition;
 		this.repairer = repairer;
 		this.destroyer = destroyer;
-		this.observers = observers;
+		this.observer = observer;
 	}
 
 	/**
@@ -89,11 +89,11 @@ public class NeighborhoodSearchOptimizer<A extends Agent, T> implements Optimize
 	 * result.
 	 * 
 	 * @param agent a valid solution agent representing a local optima
+	 * 
 	 * @return the optimized solution agent
 	 */
 	public A optimize(A agent) {
 		LOGGER.info("Input Solution Agent: {}", agent);
-		int generation = 0;
 		A bestAgent = agent;
 
 		/*
@@ -102,13 +102,6 @@ public class NeighborhoodSearchOptimizer<A extends Agent, T> implements Optimize
 		 */
 		while (!completionCondition.isComplete(agent)) {
 			LOGGER.debug("Current Solution Agent: {}", agent);
-
-			/*
-			 * Notify all registered observers.
-			 */
-			for (Observer observer : observers) {
-				observer.notify(bestAgent, agent, generation++);
-			}
 
 			/*
 			 * Generate the neighbor.
@@ -128,6 +121,11 @@ public class NeighborhoodSearchOptimizer<A extends Agent, T> implements Optimize
 					bestAgent = agent;
 				}
 			}
+
+			/*
+			 * Notify all registered observers.
+			 */
+			observer.notify(bestAgent, agent, acceptanceCriteria, repairer, destroyer);
 		}
 		LOGGER.info("Optimized Solution Agent: {}", bestAgent);
 		return bestAgent;

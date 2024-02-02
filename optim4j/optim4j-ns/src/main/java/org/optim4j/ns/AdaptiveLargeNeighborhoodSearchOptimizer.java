@@ -40,9 +40,9 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 	private final AcceptanceCriteria acceptanceCriteria;
 
 	/**
-	 * Observers of the optimization process.
+	 * Observer of the optimization process.
 	 */
-	private final Observer[] observers;
+	private final Observer<A, T> observer;
 
 	/**
 	 * A score manager for destroyers and repairers.
@@ -79,7 +79,8 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 	 * @param destroyerScores     scores for destroyers
 	 * @param updatePeriod        period by which the probabilities need to be
 	 *                            updated for repairers and destroyers
-	 * @param observers           optimization observers
+	 * @param observer            observer to get notifications of optimization
+	 *                            process
 	 * 
 	 * @throws NullPointerException     if acceptance criteria or completion
 	 *                                  condition or repairer scores or destroyer
@@ -89,7 +90,7 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 	 */
 	public AdaptiveLargeNeighborhoodSearchOptimizer(AcceptanceCriteria acceptanceCriteria,
 			CompletionCondition completionCondition, List<Repairer<T, A>> repairers, List<Destroyer<A, T>> destroyers,
-			Scores repairerScores, Scores destroyerScores, int updatePeriod, Observer... observers) {
+			Scores repairerScores, Scores destroyerScores, int updatePeriod, Observer<A, T> observer) {
 		/*
 		 * Validate input arguments.
 		 */
@@ -112,7 +113,7 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		this.repairerDestroyerManager = new RepairerDestroyerManager(repairers, destroyers, repairerScores,
 				destroyerScores);
 		this.updatePeriod = updatePeriod;
-		this.observers = observers;
+		this.observer = observer;
 	}
 
 	/**
@@ -124,7 +125,8 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 	 * @param repairers           list of repairers to be used for this optimization
 	 * @param destroyers          list of destroyers to be used for this
 	 *                            optimization
-	 * @param observers           optimization observers
+	 * @param observer            observer to get notifications of optimization
+	 *                            process
 	 * 
 	 * @throws NullPointerException     if acceptance criteria or completion
 	 *                                  condition is null
@@ -133,7 +135,7 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 	 */
 	public AdaptiveLargeNeighborhoodSearchOptimizer(AcceptanceCriteria acceptanceCriteria,
 			CompletionCondition completionCondition, List<Repairer<T, A>> repairers, List<Destroyer<A, T>> destroyers,
-			Observer... observers) {
+			Observer<A, T> observer) {
 		/*
 		 * Validate input arguments.
 		 */
@@ -150,7 +152,7 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		this.completionCondition = completionCondition;
 		this.repairerDestroyerManager = new RepairerDestroyerManager(repairers, destroyers);
 		this.updatePeriod = DEFAULT_UPDATE_PERIOD;
-		this.observers = observers;
+		this.observer = observer;
 	}
 
 	/**
@@ -161,6 +163,7 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 	 * An optimum solution is returned once the completion condition is satisfied.
 	 * 
 	 * @param agent a valid solution agent representing a local optima
+	 * 
 	 * @return the optimized solution agent
 	 */
 	public A optimize(A agent) {
@@ -175,12 +178,7 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		 */
 		while (!completionCondition.isComplete(agent)) {
 			LOGGER.debug("Generation: {}", generation);
-			/*
-			 * Notify the observers about the the best agent.
-			 */
-			for (Observer observer : observers) {
-				observer.notify(bestAgent, agent, generation);
-			}
+
 			/*
 			 * If generation is divisible by update period then update score boundaries.
 			 */
@@ -204,12 +202,11 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 			final A neighbour = repairer.repair(destroyer.destroy(agent));
 			LOGGER.debug("New Neighbor: {}", neighbour);
 
-			LOGGER.debug("Update repairer and destroyer scores.");
-
 			/*
 			 * Update the repairer and destroyer scores and replace the new current agent
 			 * and best agent by new neighbor based on it's score and acceptability.
 			 */
+			LOGGER.debug("Update repairer and destroyer scores.");
 			if (neighbour.compareTo(bestAgent) >= 0) {
 				LOGGER.debug(
 						"Neighbor Agent better than last best Agent. Replace current and best Agent by neighbor Agent.");
@@ -224,6 +221,14 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 				LOGGER.debug("Neighbor Agent is acceptable. Replace current Agent by neighbor Agent.");
 				repairerDestroyerManager.updateScoresWhenNeighborAcceptable(repairer, destroyer);
 				agent = neighbour;
+			}
+
+			/*
+			 * Notify the observer about the the best agent, current agent, acceptance
+			 * criteria, selected repairer and selected destroyer.
+			 */
+			if (observer != null) {
+				observer.notify(bestAgent, agent, acceptanceCriteria, repairer, destroyer);
 			}
 		}
 		LOGGER.info("Optimum Solution Agent: {}", bestAgent);

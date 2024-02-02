@@ -9,7 +9,7 @@ import org.optim4j.ns.CompletionCondition;
  * 
  * @author Avijit Basak
  */
-public class UnchangedBestFitness implements CompletionCondition {
+public final class UnchangedBestFitness implements CompletionCondition {
 
 	/**
 	 * Maximum number of generations allowed with unchanged best fitness.

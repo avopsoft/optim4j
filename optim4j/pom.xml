@@ -26,10 +26,15 @@
 		<slf4j.version>1.7.32</slf4j.version>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
+		<junit.version>5.7.2</junit.version>
 	</properties>
 
 	<modules>
 		<module>optim4j-ns</module>
 		<module>example-tsp</module>
 	</modules>
+
+	<dependencies>
+
+	</dependencies>
 </project>

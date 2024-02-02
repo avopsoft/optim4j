@@ -17,14 +17,19 @@ import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+import org.optim4j.ns.AcceptanceCriteria;
 import org.optim4j.ns.Agent;
+import org.optim4j.ns.Destroyer;
 import org.optim4j.ns.Observer;
+import org.optim4j.ns.Repairer;
 
-public class GraphicalObserver extends JFrame implements Observer {
+public class GraphicalObserver<A extends Agent, T> extends JFrame implements Observer<A, T> {
 
 	private JFreeChart chart;
 
 	private XYSeriesCollection dataset = new XYSeriesCollection();
+
+	private int generation;
 
 	public GraphicalObserver(String plotSubject, String xAxisLabel, String yAxisLabel) {
 		super(plotSubject);
@@ -99,10 +104,12 @@ public class GraphicalObserver extends JFrame implements Observer {
 	}
 
 	@Override
-	public void notify(Agent bestAgent, Agent currentAgent, int generation) {
+	public void notify(Agent bestAgent, Agent currentAgent, AcceptanceCriteria acceptanceCriteria,
+			Repairer<T, A> selectedRepairer, Destroyer<A, T> selectedDestroyer) {
 		addDataPoint("Best", new Point(generation, Math.abs(bestAgent.evaluate())));
 		addDataPoint("Current", new Point(generation, Math.abs(currentAgent.evaluate())));
 		setVisible(true);
+		generation++;
 	}
 
 }

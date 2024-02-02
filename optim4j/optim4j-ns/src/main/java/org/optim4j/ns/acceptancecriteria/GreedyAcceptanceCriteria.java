@@ -25,4 +25,12 @@ public class GreedyAcceptanceCriteria implements AcceptanceCriteria {
 		return neighbor.compareTo(current) >= 0;
 	}
 
+	/**
+	 * Returns the string representation of greedy acceptance criteria.
+	 */
+	@Override
+	public String toString() {
+		return "GreedyAcceptanceCriteria []";
+	}
+
 }
