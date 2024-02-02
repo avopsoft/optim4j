@@ -1,11 +1,19 @@
-package org.optim4j.examples.tsp.ns;
+package org.optim4j.examples.tsp.ns.destroyer;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.optim4j.examples.tsp.ns.Node;
+import org.optim4j.examples.tsp.ns.PartiallyDestroyedTravelRoute;
+import org.optim4j.examples.tsp.ns.TravelRoute;
 import org.optim4j.ns.Destroyer;
 
+/**
+ * A destroyer heuristic of travel route which destroys a subpath of routes.
+ * 
+ * @author Avijit Basak
+ */
 public class TravelRouteSubPathDestroyer implements Destroyer<TravelRoute, PartiallyDestroyedTravelRoute> {
 
 	private int noOfEdgesToBeRemoved;

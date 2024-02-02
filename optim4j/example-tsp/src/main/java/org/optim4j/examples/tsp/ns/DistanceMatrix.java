@@ -2,6 +2,11 @@ package org.optim4j.examples.tsp.ns;
 
 import java.util.List;
 
+/**
+ * The distance matrix to calculate distances between two locations.
+ * 
+ * @author Avijit Basak
+ */
 public class DistanceMatrix {
 
 	private final double[][] distances;

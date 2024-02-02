@@ -10,6 +10,8 @@ import java.util.List;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.optim4j.examples.tsp.ns.destroyer.TravelRouteWorstEdgeDestroyer;
+import org.optim4j.examples.tsp.ns.repairer.TravelRouteRegretNRepairer;
 import org.optim4j.ns.NeighborhoodSearchOptimizer;
 import org.optim4j.ns.acceptancecriteria.SimulatedAnnealingAcceptanceCriteria;
 import org.optim4j.ns.completioncond.UnchangedBestFitness;

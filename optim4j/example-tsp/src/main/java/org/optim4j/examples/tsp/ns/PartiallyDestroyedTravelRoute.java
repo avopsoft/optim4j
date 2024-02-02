@@ -2,6 +2,11 @@ package org.optim4j.examples.tsp.ns;
 
 import java.util.List;
 
+/**
+ * An encapsulation of partially destroyed travel route and removed nodes.
+ * 
+ * @author Avijit Basak
+ */
 public class PartiallyDestroyedTravelRoute {
 
 	private TravelRoute partialTravelRoute;

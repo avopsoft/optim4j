@@ -2,10 +2,15 @@ package org.optim4j.examples.tsp.ns;
 
 import java.util.List;
 
+/**
+ * Fitness calculator for travel route.
+ * 
+ * @author Avijit Basak
+ */
 public class TravelRouteFitnessCalculator implements FitnessCalculator {
-	
+
 	private final DistanceMatrix distanceMatrix;
-	
+
 	public TravelRouteFitnessCalculator(DistanceMatrix distanceMatrix) {
 		this.distanceMatrix = distanceMatrix;
 	}

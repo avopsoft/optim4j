@@ -7,6 +7,11 @@ import java.util.stream.Collectors;
 
 import org.optim4j.ns.Agent;
 
+/**
+ * A valid solution agent for TSP problem.
+ * 
+ * @author Avijit Basak
+ */
 public class TravelRoute implements Agent {
 
 	private List<Node> representation;

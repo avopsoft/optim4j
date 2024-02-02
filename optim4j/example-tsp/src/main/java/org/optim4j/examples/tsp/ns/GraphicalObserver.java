@@ -23,6 +23,11 @@ import org.optim4j.ns.Destroyer;
 import org.optim4j.ns.Observer;
 import org.optim4j.ns.Repairer;
 
+/**
+ * A graphical observer for tsp optimization.
+ * 
+ * @author Avijit Basak
+ */
 public class GraphicalObserver extends JFrame implements Observer<TravelRoute, PartiallyDestroyedTravelRoute> {
 
 	private JFreeChart chart;

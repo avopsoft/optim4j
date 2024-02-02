@@ -1,4 +1,4 @@
-package org.optim4j.examples.tsp.ns;
+package org.optim4j.examples.tsp.ns.destroyer;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -7,8 +7,16 @@ import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
 
+import org.optim4j.examples.tsp.ns.Node;
+import org.optim4j.examples.tsp.ns.PartiallyDestroyedTravelRoute;
+import org.optim4j.examples.tsp.ns.TravelRoute;
 import org.optim4j.ns.Destroyer;
 
+/**
+ * A destroyer heuristic of travel route which destroys few worst edges.
+ * 
+ * @author Avijit Basak
+ */
 public class TravelRouteWorstEdgeDestroyer implements Destroyer<TravelRoute, PartiallyDestroyedTravelRoute> {
 
 	private Random random = new Random();

@@ -1,12 +1,20 @@
-package org.optim4j.examples.tsp.ns;
+package org.optim4j.examples.tsp.ns.repairer;
 
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import org.optim4j.examples.tsp.ns.Node;
+import org.optim4j.examples.tsp.ns.PartiallyDestroyedTravelRoute;
+import org.optim4j.examples.tsp.ns.TravelRoute;
 import org.optim4j.ns.Repairer;
 
+/**
+ * A basic greedy repairer for partially destroyed travel route.
+ * 
+ * @author Avijit Basak
+ */
 public class TravelRouteBasicGreedyRepairer implements Repairer<PartiallyDestroyedTravelRoute, TravelRoute> {
 
 	@Override

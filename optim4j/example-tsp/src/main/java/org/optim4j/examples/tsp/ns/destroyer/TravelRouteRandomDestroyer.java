@@ -1,4 +1,4 @@
-package org.optim4j.examples.tsp.ns;
+package org.optim4j.examples.tsp.ns.destroyer;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -6,8 +6,16 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import org.optim4j.examples.tsp.ns.Node;
+import org.optim4j.examples.tsp.ns.PartiallyDestroyedTravelRoute;
+import org.optim4j.examples.tsp.ns.TravelRoute;
 import org.optim4j.ns.Destroyer;
 
+/**
+ * Destroyer of travel route by random choice of nodes.
+ * 
+ * @author Avijit Basak
+ */
 public class TravelRouteRandomDestroyer implements Destroyer<TravelRoute, PartiallyDestroyedTravelRoute> {
 
 	private Random random = new Random();

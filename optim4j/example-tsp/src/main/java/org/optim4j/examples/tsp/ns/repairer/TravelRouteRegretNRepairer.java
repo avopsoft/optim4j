@@ -1,4 +1,4 @@
-package org.optim4j.examples.tsp.ns;
+package org.optim4j.examples.tsp.ns.repairer;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -6,8 +6,16 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import org.optim4j.examples.tsp.ns.Node;
+import org.optim4j.examples.tsp.ns.PartiallyDestroyedTravelRoute;
+import org.optim4j.examples.tsp.ns.TravelRoute;
 import org.optim4j.ns.Repairer;
 
+/**
+ * A regretN repairer heuristic of travel route.
+ * 
+ * @author Avijit Basak
+ */
 public class TravelRouteRegretNRepairer implements Repairer<PartiallyDestroyedTravelRoute, TravelRoute> {
 
 	@Override

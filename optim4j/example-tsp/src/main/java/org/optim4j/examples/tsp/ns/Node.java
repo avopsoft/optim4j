@@ -2,6 +2,11 @@ package org.optim4j.examples.tsp.ns;
 
 import java.util.Objects;
 
+/**
+ * Node represents location of this problem.
+ * 
+ * @author Avijit Basak
+ */
 public class Node {
 
 	private int index;
