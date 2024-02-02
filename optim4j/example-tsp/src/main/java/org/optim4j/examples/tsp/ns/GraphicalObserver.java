@@ -23,7 +23,7 @@ import org.optim4j.ns.Destroyer;
 import org.optim4j.ns.Observer;
 import org.optim4j.ns.Repairer;
 
-public class GraphicalObserver<A extends Agent, T> extends JFrame implements Observer<A, T> {
+public class GraphicalObserver extends JFrame implements Observer<TravelRoute, PartiallyDestroyedTravelRoute> {
 
 	private JFreeChart chart;
 
@@ -105,7 +105,8 @@ public class GraphicalObserver<A extends Agent, T> extends JFrame implements Obs
 
 	@Override
 	public void notify(Agent bestAgent, Agent currentAgent, AcceptanceCriteria acceptanceCriteria,
-			Repairer<T, A> selectedRepairer, Destroyer<A, T> selectedDestroyer) {
+			Repairer<PartiallyDestroyedTravelRoute, TravelRoute> selectedRepairer,
+			Destroyer<TravelRoute, PartiallyDestroyedTravelRoute> selectedDestroyer) {
 		addDataPoint("Best", new Point(generation, Math.abs(bestAgent.evaluate())));
 		addDataPoint("Current", new Point(generation, Math.abs(currentAgent.evaluate())));
 		setVisible(true);
