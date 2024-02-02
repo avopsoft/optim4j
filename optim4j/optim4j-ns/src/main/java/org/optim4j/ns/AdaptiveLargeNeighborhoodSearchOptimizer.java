@@ -167,6 +167,7 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 	 * @return the optimized solution agent
 	 */
 	public A optimize(A agent) {
+
 		LOGGER.info("Input Solution Agent: {}", agent);
 
 		int generation = 0;

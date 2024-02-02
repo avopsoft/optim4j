@@ -12,22 +12,6 @@ import org.slf4j.LoggerFactory;
 
 class AdaptiveLargeNeighborhoodSearchOptimizerTest {
 
-	private class Coordinate {
-
-		private int x;
-
-		private int y;
-
-		private Coordinate(int x, int y) {
-			this.x = x;
-			this.y = y;
-		}
-	}
-
-	private class PartiallyDestroyedSolution {
-
-	}
-
 	private class Solution implements Agent {
 
 		@Override
@@ -39,6 +23,10 @@ class AdaptiveLargeNeighborhoodSearchOptimizerTest {
 		public double evaluate() {
 			return Math.random();
 		}
+
+	}
+
+	private class PartiallyDestroyedSolution {
 
 	}
 

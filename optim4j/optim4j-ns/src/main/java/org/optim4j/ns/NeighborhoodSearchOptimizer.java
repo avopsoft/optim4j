@@ -93,6 +93,7 @@ public class NeighborhoodSearchOptimizer<A extends Agent, T> implements Optimize
 	 * @return the optimized solution agent
 	 */
 	public A optimize(A agent) {
+
 		LOGGER.info("Input Solution Agent: {}", agent);
 		A bestAgent = agent;
 
@@ -123,9 +124,11 @@ public class NeighborhoodSearchOptimizer<A extends Agent, T> implements Optimize
 			}
 
 			/*
-			 * Notify all registered observers.
+			 * Notify the registered observer.
 			 */
-			observer.notify(bestAgent, agent, acceptanceCriteria, repairer, destroyer);
+			if (observer != null) {
+				observer.notify(bestAgent, agent, acceptanceCriteria, repairer, destroyer);
+			}
 		}
 		LOGGER.info("Optimized Solution Agent: {}", bestAgent);
 		return bestAgent;
