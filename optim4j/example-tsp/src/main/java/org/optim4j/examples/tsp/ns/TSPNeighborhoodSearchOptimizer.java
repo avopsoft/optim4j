@@ -10,7 +10,9 @@ import java.util.List;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.optim4j.examples.tsp.ns.destroyer.TravelRouteSubPathDestroyer;
 import org.optim4j.examples.tsp.ns.destroyer.TravelRouteWorstEdgeDestroyer;
+import org.optim4j.examples.tsp.ns.repairer.TravelRouteBasicGreedyRepairer;
 import org.optim4j.examples.tsp.ns.repairer.TravelRouteRegretNRepairer;
 import org.optim4j.ns.NeighborhoodSearchOptimizer;
 import org.optim4j.ns.acceptancecriteria.SimulatedAnnealingAcceptanceCriteria;
@@ -34,7 +36,7 @@ public class TSPNeighborhoodSearchOptimizer {
 		TravelRoute travelRoute = new TravelRoute(nodes, new TravelRouteFitnessCalculator(distanceMatrix));
 		NeighborhoodSearchOptimizer<TravelRoute, PartiallyDestroyedTravelRoute> neighborhoodSearchOptimizer = new NeighborhoodSearchOptimizer<>(
 				new SimulatedAnnealingAcceptanceCriteria(Double.MAX_VALUE, .99), new UnchangedBestFitness(50000),
-				new TravelRouteRegretNRepairer(), new TravelRouteWorstEdgeDestroyer(),
+				new TravelRouteBasicGreedyRepairer(), new TravelRouteSubPathDestroyer((int) (nodes.size() * .2)),
 				new GraphicalObserver("TSP Optimizer", "generations", "cost"));
 		TravelRoute optimizedTravelRoute = neighborhoodSearchOptimizer.optimize(travelRoute);
 		LOGGER.info("Optimized route: {}", optimizedTravelRoute);
