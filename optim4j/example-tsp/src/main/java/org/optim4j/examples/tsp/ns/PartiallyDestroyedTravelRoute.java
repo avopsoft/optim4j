@@ -14,7 +14,6 @@ public class PartiallyDestroyedTravelRoute {
 	private List<Node> destroyedNodes;
 
 	public PartiallyDestroyedTravelRoute(TravelRoute partialTravelRoute, List<Node> destroyedNodes) {
-		super();
 		this.partialTravelRoute = partialTravelRoute;
 		this.destroyedNodes = destroyedNodes;
 	}
