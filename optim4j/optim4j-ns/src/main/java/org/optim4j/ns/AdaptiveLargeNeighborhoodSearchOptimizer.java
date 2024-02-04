@@ -211,6 +211,7 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 			if (neighbour.compareTo(bestAgent) >= 0) {
 				LOGGER.debug(
 						"Neighbor Agent better than last best Agent. Replace current and best Agent by neighbor Agent.");
+				LOGGER.info("New Best Agent: {}", agent);
 				repairerDestroyerManager.updateScoresWhenNeighborBetterThanBest(repairer, destroyer);
 				agent = neighbour;
 				bestAgent = neighbour;
