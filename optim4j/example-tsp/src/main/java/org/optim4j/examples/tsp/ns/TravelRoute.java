@@ -68,6 +68,6 @@ public class TravelRoute implements Agent {
 
 	@Override
 	public String toString() {
-		return this.representation.toString();
+		return this.representation.toString() + ": " + evaluate();
 	}
 }

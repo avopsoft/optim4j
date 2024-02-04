@@ -119,6 +119,7 @@ public class NeighborhoodSearchOptimizer<A extends Agent, T> implements Optimize
 				agent = neighbour;
 				if (agent.compareTo(bestAgent) > 0) {
 					LOGGER.debug("Neighbor Agent is better than last best Agent.");
+					LOGGER.info("New Best Agent: {}", agent);
 					bestAgent = agent;
 				}
 			}

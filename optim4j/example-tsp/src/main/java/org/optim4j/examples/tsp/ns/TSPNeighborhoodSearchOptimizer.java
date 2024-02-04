@@ -35,7 +35,7 @@ public class TSPNeighborhoodSearchOptimizer {
 		Collections.shuffle(nodes);
 		TravelRoute travelRoute = new TravelRoute(nodes, new TravelRouteFitnessCalculator(distanceMatrix));
 		NeighborhoodSearchOptimizer<TravelRoute, PartiallyDestroyedTravelRoute> neighborhoodSearchOptimizer = new NeighborhoodSearchOptimizer<>(
-				new SimulatedAnnealingAcceptanceCriteria(Double.MAX_VALUE, .99), new UnchangedBestFitness(50000),
+				new SimulatedAnnealingAcceptanceCriteria(Double.MAX_VALUE, .99), new UnchangedBestFitness(200),
 				new TravelRouteBasicGreedyRepairer(), new TravelRouteSubPathDestroyer((int) (nodes.size() * .2)),
 				new GraphicalObserver("TSP Optimizer", "generations", "cost"));
 		TravelRoute optimizedTravelRoute = neighborhoodSearchOptimizer.optimize(travelRoute);
