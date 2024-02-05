@@ -14,7 +14,7 @@ import org.optim4j.examples.tsp.ns.destroyer.TravelRouteSubPathDestroyer;
 import org.optim4j.examples.tsp.ns.destroyer.TravelRouteWorstEdgeDestroyer;
 import org.optim4j.examples.tsp.ns.repairer.TravelRouteBasicGreedyRepairer;
 import org.optim4j.examples.tsp.ns.repairer.TravelRouteRegretNRepairer;
-import org.optim4j.ns.NeighborhoodSearchOptimizer;
+import org.optim4j.ns.LargeNeighborhoodSearchOptimizer;
 import org.optim4j.ns.acceptancecriteria.SimulatedAnnealingAcceptanceCriteria;
 import org.optim4j.ns.completioncond.UnchangedBestFitness;
 import org.slf4j.Logger;
@@ -25,16 +25,16 @@ import org.slf4j.LoggerFactory;
  * 
  * @author Avijit Basak
  */
-public class TSPNeighborhoodSearchOptimizer {
+public class TSPLargeNeighborhoodSearchOptimizer {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(TSPNeighborhoodSearchOptimizer.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TSPLargeNeighborhoodSearchOptimizer.class);
 
 	public static void main(String[] args) throws IOException {
 		List<Node> nodes = getTravelNodes(args[0]);
 		DistanceMatrix distanceMatrix = new DistanceMatrix(nodes);
 		Collections.shuffle(nodes);
 		TravelRoute travelRoute = new TravelRoute(nodes, new TravelRouteFitnessCalculator(distanceMatrix));
-		NeighborhoodSearchOptimizer<TravelRoute, PartiallyDestroyedTravelRoute> neighborhoodSearchOptimizer = new NeighborhoodSearchOptimizer<>(
+		LargeNeighborhoodSearchOptimizer<TravelRoute, PartiallyDestroyedTravelRoute> neighborhoodSearchOptimizer = new LargeNeighborhoodSearchOptimizer<>(
 				new SimulatedAnnealingAcceptanceCriteria(Double.MAX_VALUE, .99), new UnchangedBestFitness(200),
 				new TravelRouteBasicGreedyRepairer(), new TravelRouteSubPathDestroyer((int) (nodes.size() * .2)),
 				new GraphicalObserver("TSP Optimizer", "generations", "cost"));

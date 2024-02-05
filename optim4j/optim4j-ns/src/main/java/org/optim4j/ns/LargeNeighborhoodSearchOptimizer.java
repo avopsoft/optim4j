@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
  * @param <A> a valid solution agent type
  * @param <T> partially destroyed solution agent type
  */
-public class NeighborhoodSearchOptimizer<A extends Agent, T> implements Optimizer<A> {
+public class LargeNeighborhoodSearchOptimizer<A extends Agent, T> implements Optimizer<A> {
 
 	/**
 	 * Completion condition of the optimization process.
@@ -48,7 +48,7 @@ public class NeighborhoodSearchOptimizer<A extends Agent, T> implements Optimize
 	private Destroyer<A, T> destroyer;
 
 	/** Instance of logger. **/
-	private static final Logger LOGGER = LoggerFactory.getLogger(NeighborhoodSearchOptimizer.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(LargeNeighborhoodSearchOptimizer.class);
 
 	/**
 	 * Constructs an instance of neighborhood search optimizer.
@@ -65,7 +65,7 @@ public class NeighborhoodSearchOptimizer<A extends Agent, T> implements Optimize
 	 * 
 	 * @throws NullPointerException if any input argument is null
 	 */
-	public NeighborhoodSearchOptimizer(AcceptanceCriteria acceptanceCriteria, CompletionCondition completionCondition,
+	public LargeNeighborhoodSearchOptimizer(AcceptanceCriteria acceptanceCriteria, CompletionCondition completionCondition,
 			Repairer<T, A> repairer, Destroyer<A, T> destroyer, Observer<A, T> observer) {
 		/*
 		 * Validate input arguments.
