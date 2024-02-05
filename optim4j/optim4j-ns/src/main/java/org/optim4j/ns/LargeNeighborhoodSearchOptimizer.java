@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * An implementation of neighborhood search optimization process.
+ * An implementation of large neighborhood search optimization process.
  * <p>
  * This implementation accepts a solution agent which is a local optima of the
  * problem domain. The optimization process transforms the same using destroy
