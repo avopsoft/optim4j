@@ -62,6 +62,18 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 	private static final int DEFAULT_UPDATE_PERIOD = 10;
 
 	/**
+	 * The period by which the scores of repairer and destroyer heuristics need to
+	 * be reset.
+	 */
+	private final int scoreResetPeriod;
+
+	/**
+	 * Default period by which the scores of repairer and destroyer heuristics need
+	 * to be reset.
+	 */
+	private static final int DEFAULT_SCORE_RESET_PERIOD = 50;
+
+	/**
 	 * Instance of logger.
 	 */
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdaptiveLargeNeighborhoodSearchOptimizer.class);
@@ -79,6 +91,8 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 	 * @param destroyerScores     scores for destroyers
 	 * @param updatePeriod        period by which the probabilities need to be
 	 *                            updated for repairers and destroyers
+	 * @param scoreResetPeriod    period by which the scores of repairer and
+	 *                            destroyer heuristics need to be reset
 	 * @param observer            observer to get notifications of optimization
 	 *                            process
 	 * 
@@ -90,7 +104,8 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 	 */
 	public AdaptiveLargeNeighborhoodSearchOptimizer(AcceptanceCriteria acceptanceCriteria,
 			CompletionCondition completionCondition, List<Repairer<T, A>> repairers, List<Destroyer<A, T>> destroyers,
-			Scores repairerScores, Scores destroyerScores, int updatePeriod, Observer<A, T> observer) {
+			Scores repairerScores, Scores destroyerScores, int updatePeriod, int scoreResetPeriod,
+			Observer<A, T> observer) {
 		/*
 		 * Validate input arguments.
 		 */
@@ -113,6 +128,7 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		this.repairerDestroyerManager = new RepairerDestroyerManager(repairers, destroyers, repairerScores,
 				destroyerScores);
 		this.updatePeriod = updatePeriod;
+		this.scoreResetPeriod = scoreResetPeriod;
 		this.observer = observer;
 	}
 
@@ -152,6 +168,7 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		this.completionCondition = completionCondition;
 		this.repairerDestroyerManager = new RepairerDestroyerManager(repairers, destroyers);
 		this.updatePeriod = DEFAULT_UPDATE_PERIOD;
+		this.scoreResetPeriod = DEFAULT_SCORE_RESET_PERIOD;
 		this.observer = observer;
 	}
 
@@ -181,9 +198,16 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 			LOGGER.debug("Generation: {}", generation);
 
 			/*
-			 * If generation is divisible by update period then update score boundaries.
+			 * If generation is divisible by score reset period then reset the repairer and
+			 * destroyer scores.
 			 */
-			if (generation++ % updatePeriod == 0) {
+			if (generation % scoreResetPeriod == 0) {
+				LOGGER.info("Reset repairer and destroyer heuristic scores.");
+				repairerDestroyerManager.resetScores();
+			} else if (generation % updatePeriod == 0) {
+				/*
+				 * If generation is divisible by update period then update score boundaries.
+				 */
 				LOGGER.info("Update score boundaries");
 				repairerDestroyerManager.updateScoreBoundaries();
 			}
@@ -232,6 +256,7 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 			if (observer != null) {
 				observer.notify(bestAgent, agent, acceptanceCriteria, repairer, destroyer);
 			}
+			generation++;
 		}
 		LOGGER.info("Optimum Solution Agent: {}", bestAgent);
 		return bestAgent;
@@ -326,6 +351,20 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 					DEFAULT_SCORE_INCREMENT_WHEN_NEIGHBOR_ACCEPTABLE);
 			repairers.stream().forEach(repairer -> repairerScoreMap.put(repairer, repairerScores.initialScore));
 			destroyers.stream().forEach(destroyer -> destroyerScoreMap.put(destroyer, destroyerScores.initialScore));
+		}
+
+		/**
+		 * Reset scores of repairers and destroyers.
+		 */
+		private void resetScores() {
+			LOGGER.debug("reset scores of repairers and destroyers.");
+			for (Repairer<T, A> repairer : repairerScoreMap.keySet()) {
+				repairerScoreMap.put(repairer, this.repairerScores.initialScore);
+			}
+			for (Destroyer<A, T> destroyer : destroyerScoreMap.keySet()) {
+				destroyerScoreMap.put(destroyer, this.destroyerScores.initialScore);
+			}
+			updateScoreBoundaries();
 		}
 
 		/**
