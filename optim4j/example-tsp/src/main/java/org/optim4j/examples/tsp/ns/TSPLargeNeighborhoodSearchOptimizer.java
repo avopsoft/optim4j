@@ -19,7 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Traveling salesman problem solution using neighborhood search process.
+ * Traveling salesman problem solution using large neighborhood search optimizer.
  * 
  * @author Avijit Basak
  */
