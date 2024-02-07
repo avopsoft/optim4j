@@ -1,2 +1,49 @@
-# optim4j
-This repository contains a java library for AI optimization algorithms.
+# optim4j - A java library for optimization algorithms
+This repository contains a java library for optimization algorithms. Current version of library provides implementation of following algorithms.
+## Large Neighborhood Search (LNS): 
+**Large Neighborhood Search** algorithm starts with an **initial** solution and searchs its neighborhood to find an optimum solution. The neighborhood size is considered to be large. The algorithm uses a destroy and repair heuristic to explore the domain. The implementation is provided as part of **optim4j-ns** module.
+<br/>The algorithm implements the following **pseudocode**:
+<br/>&ensp;**Input:** Problem Domain I
+<br/>&ensp;create initial solution a<sub>best</sub> = a ∈ A(I)
+<br/>&ensp;**while** stopping criteria not met **do**
+<br/>&ensp;&ensp;&ensp;a<sub>neighbor</sub> = repair(destroy(a))
+<br/>&ensp;&ensp;&ensp;if accept(a, a<sub>neighbor</sub>) **then**
+<br/>&ensp;&ensp;&ensp;&ensp;a = a<sub>neighbor</sub>
+<br/>&ensp;&ensp;&ensp;&ensp;if fitness(a) >= fitness(a<sub>best</sub>) **then**
+<br/>&ensp;&ensp;&ensp;&ensp;&ensp;a<sub>best</sub> = a
+<br/>&ensp;**return** a<sub>best</sub>
+<br/>**Usage:**
+>&ensp;&ensp;AcceptanceCriteria acceptanceCriteria = new SimulatedAnnealingAcceptanceCriteria(100000, .9);
+<br/>&ensp;&ensp;CompletionCondition completionCondition = new FixedIteration(100);
+<br/>&ensp;&ensp;Repairer<PartiallyDestroyedSolutionAgent, SolutionAgent> repairer = ...//Create an instance of repairer depending on problem domain
+<br/>&ensp;&ensp;Destroyer<SolutionAgent, PartiallyDestroyedSolutionAgent> destroyer = ...//Create an instance of destroyer depending on problem domain
+<br/>&ensp;&ensp;LargeNeighborhoodSearchOptimizer<SolutionAgent, PartiallyDestroyedSolutionAgent> lnsOptimizer = new LargeNeighborhoodSearchOptimizer<>(acceptanceCriteria, stoppingCondition, repairer, destroyer, observer);
+<br/>&ensp;&ensp;lnsOptimizer.optimize(initialSolutionAgent);
+## Adaptive Large Neighborhood Search (ALNS):
+**Adaptive Large Neighborhood Search** algorithm searches a large neighbor following LNS using multiple destroy and repair heuristics to find the optimum solution. The repair and destroy heuristic is chosen based on past performance during optimization. The implementation is provided as part of **optim4j-ns** module.
+<br/>The algorithm implements the following **pseudocode**:
+<br/>&ensp;**Input:** Problem Domain I
+<br/>&ensp;create initial solution a<sub>best</sub> = a ∈ A(I)
+<br/>&ensp;**while** stopping criteria not met **do**
+<br/>&ensp;&ensp;&ensp;**adjust** the probabilities p<sub>i</sub> of the destroyer and repairer heuristics **following** configured adjustment period
+<br/>&ensp;&ensp;&ensp;**select** repairer and destroyer based on their respective probabilities p<sub>i</sub>
+<br/>&ensp;&ensp;&ensp;a<sub>neighbor</sub> = repair(destroy(a))
+<br/>&ensp;&ensp;&ensp;if accept(a, a<sub>neighbor</sub>) **then**
+<br/>&ensp;&ensp;&ensp;&ensp;a = a<sub>neighbor</sub>
+<br/>&ensp;&ensp;&ensp;&ensp;if fitness(a) >= fitness(a<sub>best</sub>) **then**
+<br/>&ensp;&ensp;&ensp;&ensp;&ensp;a<sub>best</sub> = a
+<br/>&ensp;&ensp;&ensp;**update** scores of destroyer and repairer heuristics.
+<br/>&ensp;**return** a<sub>best</sub>
+<br/>**Usage:**
+>&ensp;&ensp;AcceptanceCriteria acceptanceCriteria = new SimulatedAnnealingAcceptanceCriteria(100000, .9);
+<br/>&ensp;&ensp;CompletionCondition completionCondition = new FixedIteration(100);
+<br/>&ensp;&ensp;List<Repairer<PartiallyDestroyedSolutionAgent, SolutionAgent>> repairers = ...//Create a list of repairers depending on problem domain
+<br/>&ensp;&ensp;List<Destroyer<SolutionAgent, PartiallyDestroyedSolutionAgent>> destroyers = ...//Create a list of destroyers depending on problem domain
+<br/>&ensp;&ensp;AdaptiveLargeNeighborhoodSearchOptimizer<TravelRoute, PartiallyDestroyedTravelRoute> alnsOptimizer = new AdaptiveLargeNeighborhoodSearchOptimizer<>(acceptanceCriteria, completionCondition, repairers, destroyers, observer);
+<br/>&ensp;&ensp;alnsOptimizer.optimize(initialSolutionAgent);
+
+## Examples:
+Examples has been provided for travelling salesman problem as part of **tsp** module.
+
+## References:
+1) [Roman Lutz. Adaptive Large Neighborhood Search. Bachelor thesis, Ulm University, 15.08.2014](https://d-nb.info/1072464683/34)
