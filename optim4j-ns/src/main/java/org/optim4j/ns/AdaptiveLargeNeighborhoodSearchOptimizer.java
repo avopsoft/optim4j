@@ -247,6 +247,9 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 				LOGGER.debug("Neighbor Agent is acceptable. Replace current Agent by neighbor Agent.");
 				repairerDestroyerManager.updateScoresWhenNeighborAcceptable(repairer, destroyer);
 				agent = neighbour;
+			} else {
+				LOGGER.debug("Neighbor Agent is not acceptable.");
+				repairerDestroyerManager.updateScoresWhenNeighborNotAcceptable(repairer, destroyer);
 			}
 
 			/*
@@ -319,6 +322,12 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		private static final double DEFAULT_SCORE_INCREMENT_WHEN_NEIGHBOR_ACCEPTABLE = 50;
 
 		/**
+		 * Default score decrement when neighbor is not acceptable according to
+		 * acceptance criteria.
+		 */
+		private static final double DEFAULT_SCORE_DECREMENT_WHEN_NEIGHBOR_NOT_ACCEPTABLE = 0;
+
+		/**
 		 * Initializes repairers and destroyers with user provided scores.
 		 * 
 		 * @param repairers       list of repairers
@@ -344,11 +353,13 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 			this.repairerScores = new Scores(DEFAULT_INITIAL_SCORE,
 					DEFAULT_SCORE_INCREMENT_WHEN_NEIGHBOR_BETTER_THAN_BEST,
 					DEFAULT_SCORE_INCREMENT_WHEN_NEIGHBOR_BETTER_THAN_CURRENT,
-					DEFAULT_SCORE_INCREMENT_WHEN_NEIGHBOR_ACCEPTABLE);
+					DEFAULT_SCORE_INCREMENT_WHEN_NEIGHBOR_ACCEPTABLE,
+					DEFAULT_SCORE_DECREMENT_WHEN_NEIGHBOR_NOT_ACCEPTABLE);
 			this.destroyerScores = new Scores(DEFAULT_INITIAL_SCORE,
 					DEFAULT_SCORE_INCREMENT_WHEN_NEIGHBOR_BETTER_THAN_BEST,
 					DEFAULT_SCORE_INCREMENT_WHEN_NEIGHBOR_BETTER_THAN_CURRENT,
-					DEFAULT_SCORE_INCREMENT_WHEN_NEIGHBOR_ACCEPTABLE);
+					DEFAULT_SCORE_INCREMENT_WHEN_NEIGHBOR_ACCEPTABLE,
+					DEFAULT_SCORE_DECREMENT_WHEN_NEIGHBOR_NOT_ACCEPTABLE);
 			repairers.stream().forEach(repairer -> repairerScoreMap.put(repairer, repairerScores.initialScore));
 			destroyers.stream().forEach(destroyer -> destroyerScoreMap.put(destroyer, destroyerScores.initialScore));
 		}
@@ -546,6 +557,20 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 					destroyerScores.scoreIncrementWhenNeighborAcceptable + this.destroyerScoreMap.get(destroyer));
 		}
 
+		/**
+		 * Updates repairer and destroyer scores when the neighbor agent is not
+		 * acceptable.
+		 * 
+		 * @param repairer  selected repairer
+		 * @param destroyer selected destroyer
+		 */
+		private void updateScoresWhenNeighborNotAcceptable(Repairer<T, A> repairer, Destroyer<A, T> destroyer) {
+			this.repairerScoreMap.put(repairer,
+					this.repairerScoreMap.get(repairer) - repairerScores.scoreDecrementWhenNeighborNotAcceptable);
+			this.destroyerScoreMap.put(destroyer,
+					this.destroyerScoreMap.get(destroyer) - destroyerScores.scoreDecrementWhenNeighborNotAcceptable);
+		}
+
 	}
 
 	/**
@@ -575,6 +600,12 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		private final double scoreIncrementWhenNeighborAcceptable;
 
 		/**
+		 * Score decrement when the neighbor is not acceptable according to acceptance
+		 * criteria.
+		 */
+		private final double scoreDecrementWhenNeighborNotAcceptable;
+
+		/**
 		 * Initializes the instance with provided values.
 		 * 
 		 * @param initialScore                                initial score
@@ -587,13 +618,18 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		 *                                                    or best agent but is still
 		 *                                                    acceptable according to
 		 *                                                    acceptance criteria
+		 * @param scoreDecrementWhenNeighborNotAcceptable     score when neighbor is not
+		 *                                                    acceptable according to
+		 *                                                    acceptance criteria
 		 */
 		public Scores(double initialScore, double scoreIncrementWhenNeighborBetterThanBest,
-				double scoreIncrementWhenNeighborBetterThanCurrent, double scoreIncrementWhenNeighborAcceptable) {
+				double scoreIncrementWhenNeighborBetterThanCurrent, double scoreIncrementWhenNeighborAcceptable,
+				double scoreDecrementWhenNeighborNotAcceptable) {
 			this.initialScore = initialScore;
 			this.scoreIncrementWhenNeighborBetterThanBest = scoreIncrementWhenNeighborBetterThanBest;
 			this.scoreIncrementWhenNeighborBetterThanCurrent = scoreIncrementWhenNeighborBetterThanCurrent;
 			this.scoreIncrementWhenNeighborAcceptable = scoreIncrementWhenNeighborAcceptable;
+			this.scoreDecrementWhenNeighborNotAcceptable = scoreDecrementWhenNeighborNotAcceptable;
 		}
 	}
 
