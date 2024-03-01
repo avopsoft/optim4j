@@ -47,7 +47,7 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 	/**
 	 * A score manager for destroyers and repairers.
 	 */
-	private final RepairerDestroyerManager repairerDestroyerManager;
+	private final RepairerDestroyerManager<T, A> repairerDestroyerManager;
 
 	/**
 	 * The period by which the probabilities need to be updated for repairers and
@@ -125,7 +125,7 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 
 		this.acceptanceCriteria = acceptanceCriteria;
 		this.completionCondition = completionCondition;
-		this.repairerDestroyerManager = new RepairerDestroyerManager(repairers, destroyers, repairerScores,
+		this.repairerDestroyerManager = new DefaultRepairerDestroyerManager(repairers, destroyers, repairerScores,
 				destroyerScores);
 		this.updatePeriod = updatePeriod;
 		this.scoreResetPeriod = scoreResetPeriod;
@@ -166,7 +166,7 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 
 		this.acceptanceCriteria = acceptanceCriteria;
 		this.completionCondition = completionCondition;
-		this.repairerDestroyerManager = new RepairerDestroyerManager(repairers, destroyers);
+		this.repairerDestroyerManager = new DefaultRepairerDestroyerManager(repairers, destroyers);
 		this.updatePeriod = DEFAULT_UPDATE_PERIOD;
 		this.scoreResetPeriod = DEFAULT_SCORE_RESET_PERIOD;
 		this.observer = observer;
@@ -266,9 +266,85 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 	}
 
 	/**
+	 * Repairer destroyer manager for adaptive large neighborhood search.
+	 * 
+	 * @author Avijit Basak
+	 *
+	 * @param <T> Partially destroyed agent type
+	 * @param <A> Agent type
+	 */
+	public interface RepairerDestroyerManager<T, A extends Agent> {
+
+		/**
+		 * Reset scores of repairers and destroyers.
+		 */
+		void resetScores();
+
+		/**
+		 * Updates score boundaries for repairers and destroyers.
+		 */
+		void updateScoreBoundaries();
+
+		/**
+		 * Updates repairer and destroyer scores when the neighbor agent is better than
+		 * best agent.
+		 * 
+		 * @param repairer  selected repairer
+		 * @param destroyer selected destroyer
+		 */
+		void updateScoresWhenNeighborBetterThanBest(Repairer<T, A> repairer, Destroyer<A, T> destroyer);
+
+		/**
+		 * Updates repairer and destroyer scores when the neighbor agent is better than
+		 * current agent.
+		 * 
+		 * @param repairer  selected repairer
+		 * @param destroyer selected destroyer
+		 */
+		void updateScoresWhenNeighborBetterThanCurrent(Repairer<T, A> repairer, Destroyer<A, T> destroyer);
+
+		/**
+		 * Updates repairer and destroyer scores when the neighbor agent is acceptable
+		 * although it is not better than best or current agent.
+		 * 
+		 * @param repairer  selected repairer
+		 * @param destroyer selected destroyer
+		 */
+		void updateScoresWhenNeighborAcceptable(Repairer<T, A> repairer, Destroyer<A, T> destroyer);
+
+		/**
+		 * Updates repairer and destroyer scores when the neighbor agent is not
+		 * acceptable.
+		 * 
+		 * @param repairer  selected repairer
+		 * @param destroyer selected destroyer
+		 */
+		void updateScoresWhenNeighborNotAcceptable(Repairer<T, A> repairer, Destroyer<A, T> destroyer);
+
+		/**
+		 * Selects a repairer.
+		 * 
+		 * @return the selected repairer
+		 * 
+		 * @throws IllegalArgumentException if list of repairers is empty
+		 */
+		Repairer<T, A> getRepairer();
+
+		/**
+		 * Selects a destroyer.
+		 * 
+		 * @return the selected destroyer
+		 * 
+		 * @throws IllegalArgumentException if list of destroyers is empty
+		 */
+		Destroyer<A, T> getDestroyer();
+
+	}
+
+	/**
 	 * Manager of repairers and destroyers and their score.
 	 */
-	private class RepairerDestroyerManager {
+	private class DefaultRepairerDestroyerManager implements RepairerDestroyerManager<T, A> {
 
 		/**
 		 * Map of repairer scores.
@@ -335,7 +411,7 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		 * @param repairerScores  scores of repairers
 		 * @param destroyerScores scores of destroyers
 		 */
-		private RepairerDestroyerManager(List<Repairer<T, A>> repairers, List<Destroyer<A, T>> destroyers,
+		private DefaultRepairerDestroyerManager(List<Repairer<T, A>> repairers, List<Destroyer<A, T>> destroyers,
 				Scores repairerScores, Scores destroyerScores) {
 			this.repairerScores = repairerScores;
 			this.destroyerScores = destroyerScores;
@@ -349,7 +425,7 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		 * @param repairers  list of repairers
 		 * @param destroyers list of destroyers
 		 */
-		private RepairerDestroyerManager(List<Repairer<T, A>> repairers, List<Destroyer<A, T>> destroyers) {
+		private DefaultRepairerDestroyerManager(List<Repairer<T, A>> repairers, List<Destroyer<A, T>> destroyers) {
 			this.repairerScores = new Scores(DEFAULT_INITIAL_SCORE,
 					DEFAULT_SCORE_INCREMENT_WHEN_NEIGHBOR_BETTER_THAN_BEST,
 					DEFAULT_SCORE_INCREMENT_WHEN_NEIGHBOR_BETTER_THAN_CURRENT,
@@ -367,7 +443,7 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		/**
 		 * Reset scores of repairers and destroyers.
 		 */
-		private void resetScores() {
+		public void resetScores() {
 			LOGGER.debug("reset scores of repairers and destroyers.");
 			for (Repairer<T, A> repairer : repairerScoreMap.keySet()) {
 				repairerScoreMap.put(repairer, this.repairerScores.initialScore);
@@ -381,7 +457,7 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		/**
 		 * Updates score boundaries for repairers and destroyers.
 		 */
-		private void updateScoreBoundaries() {
+		public void updateScoreBoundaries() {
 			final Set<Repairer<T, A>> repairers = repairerScoreMap.keySet();
 			final Set<Destroyer<A, T>> destroyers = destroyerScoreMap.keySet();
 
@@ -413,7 +489,7 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		 * 
 		 * @throws IllegalArgumentException if list of repairers is empty
 		 */
-		private Repairer<T, A> getRepairer() {
+		public Repairer<T, A> getRepairer() {
 			LOGGER.trace("Calculate total score for repairers.");
 			final Optional<Double> totalScore = repairerScoreBoundaries.keySet().stream()
 					.map(scoreBoundary -> scoreBoundary.maxScore).reduce((Double t, Double u) -> t > u ? t : u);
@@ -438,7 +514,7 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		 * 
 		 * @throws IllegalArgumentException if list of destroyers is empty
 		 */
-		private Destroyer<A, T> getDestroyer() {
+		public Destroyer<A, T> getDestroyer() {
 			LOGGER.trace("Calculate total score for destroyers.");
 			final Optional<Double> totalScore = destroyerScoreBoundaries.keySet().stream()
 					.map(scoreBoundary -> scoreBoundary.maxScore).reduce((Double t, Double u) -> t > u ? t : u);
@@ -457,6 +533,62 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		}
 
 		/**
+		 * Updates repairer and destroyer scores when the neighbor agent is better than
+		 * best agent.
+		 * 
+		 * @param repairer  selected repairer
+		 * @param destroyer selected destroyer
+		 */
+		public void updateScoresWhenNeighborBetterThanBest(Repairer<T, A> repairer, Destroyer<A, T> destroyer) {
+			this.repairerScoreMap.put(repairer,
+					repairerScores.scoreIncrementWhenNeighborBetterThanBest + this.repairerScoreMap.get(repairer));
+			this.destroyerScoreMap.put(destroyer,
+					destroyerScores.scoreIncrementWhenNeighborBetterThanBest + this.destroyerScoreMap.get(destroyer));
+		}
+
+		/**
+		 * Updates repairer and destroyer scores when the neighbor agent is better than
+		 * current agent.
+		 * 
+		 * @param repairer  selected repairer
+		 * @param destroyer selected destroyer
+		 */
+		public void updateScoresWhenNeighborBetterThanCurrent(Repairer<T, A> repairer, Destroyer<A, T> destroyer) {
+			this.repairerScoreMap.put(repairer,
+					repairerScores.scoreIncrementWhenNeighborBetterThanCurrent + this.repairerScoreMap.get(repairer));
+			this.destroyerScoreMap.put(destroyer, destroyerScores.scoreIncrementWhenNeighborBetterThanCurrent
+					+ this.destroyerScoreMap.get(destroyer));
+		}
+
+		/**
+		 * Updates repairer and destroyer scores when the neighbor agent is acceptable
+		 * although it is not better than best or current agent.
+		 * 
+		 * @param repairer  selected repairer
+		 * @param destroyer selected destroyer
+		 */
+		public void updateScoresWhenNeighborAcceptable(Repairer<T, A> repairer, Destroyer<A, T> destroyer) {
+			this.repairerScoreMap.put(repairer,
+					repairerScores.scoreIncrementWhenNeighborAcceptable + this.repairerScoreMap.get(repairer));
+			this.destroyerScoreMap.put(destroyer,
+					destroyerScores.scoreIncrementWhenNeighborAcceptable + this.destroyerScoreMap.get(destroyer));
+		}
+
+		/**
+		 * Updates repairer and destroyer scores when the neighbor agent is not
+		 * acceptable.
+		 * 
+		 * @param repairer  selected repairer
+		 * @param destroyer selected destroyer
+		 */
+		public void updateScoresWhenNeighborNotAcceptable(Repairer<T, A> repairer, Destroyer<A, T> destroyer) {
+			this.repairerScoreMap.put(repairer,
+					this.repairerScoreMap.get(repairer) - repairerScores.scoreDecrementWhenNeighborNotAcceptable);
+			this.destroyerScoreMap.put(destroyer, Math.max(DEFAULT_INITIAL_SCORE,
+					this.destroyerScoreMap.get(destroyer) - destroyerScores.scoreDecrementWhenNeighborNotAcceptable));
+		}
+
+		/**
 		 * An encapsulation of score boundary for repairer and destroyer.
 		 */
 		private class ScoreBoundary {
@@ -471,11 +603,23 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 			 */
 			private double maxScore;
 
+			/**
+			 * Constructs score boundary based on provided min and max score.
+			 * 
+			 * @param minScore minimum score
+			 * @param maxScore maximum score
+			 */
 			private ScoreBoundary(double minScore, double maxScore) {
 				this.minScore = minScore;
 				this.maxScore = maxScore;
 			}
 
+			/**
+			 * Checks if the provided score is in between min and max scores.
+			 * 
+			 * @param score input score
+			 * @return true/false
+			 */
 			private boolean isBetween(double score) {
 				return score >= minScore && score < maxScore;
 			}
@@ -489,6 +633,9 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 				return result;
 			}
 
+			/**
+			 * Compares two score boundaries and returns true if both are equal.
+			 */
 			@Override
 			public boolean equals(Object obj) {
 				if (this == obj)
@@ -504,8 +651,13 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 						&& Double.doubleToLongBits(minScore) == Double.doubleToLongBits(other.minScore);
 			}
 
-			private RepairerDestroyerManager getEnclosingInstance() {
-				return RepairerDestroyerManager.this;
+			/**
+			 * Provides the enclosing instance.
+			 * 
+			 * @return the instance of encapsulating repairer destroyer manager.
+			 */
+			private DefaultRepairerDestroyerManager getEnclosingInstance() {
+				return DefaultRepairerDestroyerManager.this;
 			}
 
 			@Override
@@ -513,62 +665,6 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 				return "ScoreBoundary [minScore=" + minScore + ", maxScore=" + maxScore + "]";
 			}
 
-		}
-
-		/**
-		 * Updates repairer and destroyer scores when the neighbor agent is better than
-		 * best agent.
-		 * 
-		 * @param repairer  selected repairer
-		 * @param destroyer selected destroyer
-		 */
-		private void updateScoresWhenNeighborBetterThanBest(Repairer<T, A> repairer, Destroyer<A, T> destroyer) {
-			this.repairerScoreMap.put(repairer,
-					repairerScores.scoreIncrementWhenNeighborBetterThanBest + this.repairerScoreMap.get(repairer));
-			this.destroyerScoreMap.put(destroyer,
-					destroyerScores.scoreIncrementWhenNeighborBetterThanBest + this.destroyerScoreMap.get(destroyer));
-		}
-
-		/**
-		 * Updates repairer and destroyer scores when the neighbor agent is better than
-		 * current agent.
-		 * 
-		 * @param repairer  selected repairer
-		 * @param destroyer selected destroyer
-		 */
-		private void updateScoresWhenNeighborBetterThanCurrent(Repairer<T, A> repairer, Destroyer<A, T> destroyer) {
-			this.repairerScoreMap.put(repairer,
-					repairerScores.scoreIncrementWhenNeighborBetterThanCurrent + this.repairerScoreMap.get(repairer));
-			this.destroyerScoreMap.put(destroyer, destroyerScores.scoreIncrementWhenNeighborBetterThanCurrent
-					+ this.destroyerScoreMap.get(destroyer));
-		}
-
-		/**
-		 * Updates repairer and destroyer scores when the neighbor agent is acceptable
-		 * although it is not better than best or current agent.
-		 * 
-		 * @param repairer  selected repairer
-		 * @param destroyer selected destroyer
-		 */
-		private void updateScoresWhenNeighborAcceptable(Repairer<T, A> repairer, Destroyer<A, T> destroyer) {
-			this.repairerScoreMap.put(repairer,
-					repairerScores.scoreIncrementWhenNeighborAcceptable + this.repairerScoreMap.get(repairer));
-			this.destroyerScoreMap.put(destroyer,
-					destroyerScores.scoreIncrementWhenNeighborAcceptable + this.destroyerScoreMap.get(destroyer));
-		}
-
-		/**
-		 * Updates repairer and destroyer scores when the neighbor agent is not
-		 * acceptable.
-		 * 
-		 * @param repairer  selected repairer
-		 * @param destroyer selected destroyer
-		 */
-		private void updateScoresWhenNeighborNotAcceptable(Repairer<T, A> repairer, Destroyer<A, T> destroyer) {
-			this.repairerScoreMap.put(repairer,
-					this.repairerScoreMap.get(repairer) - repairerScores.scoreDecrementWhenNeighborNotAcceptable);
-			this.destroyerScoreMap.put(destroyer, Math.max(DEFAULT_INITIAL_SCORE,
-					this.destroyerScoreMap.get(destroyer) - destroyerScores.scoreDecrementWhenNeighborNotAcceptable));
 		}
 
 	}
