@@ -8,8 +8,4 @@ Adaptive Large Neighborhood Search algorithm searches a large neighbor following
 The implementation is provided as part of "optim4j-ns" module.
 
 # References:
-1) Paul Shaw. Using constraint programming and local search methods to
-solve vehicle routing problems. In Principles and Practice of Constraint
-Programming-CP98, pages 417–431. Springer, 1998.
-2)  Stefan Ropke and David Pisinger. An adaptive large neighborhood search
-heuristic for the pickup and delivery problem with time windows. Transportation science, 40(4):455–472, 2006.
+1) [Roman Lutz. Adaptive Large Neighborhood Search. Bachelor thesis, Ulm University, 15.08.2014](https://d-nb.info/1072464683/34)
