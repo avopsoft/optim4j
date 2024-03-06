@@ -173,6 +173,46 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 	}
 
 	/**
+	 * Constructs an instance of adaptive large neighborhood search optimizer.
+	 * 
+	 * @param acceptanceCriteria       acceptance criteria for newly generated
+	 *                                 solution agent
+	 * @param completionCondition      optimization completion condition
+	 * @param repairerDestroyerManager instance of repairer destroyer manager
+	 * @param updatePeriod             period by which the probabilities need to be
+	 *                                 updated for repairers and destroyers
+	 * @param scoreResetPeriod         period by which the scores of repairer and
+	 *                                 destroyer heuristics need to be reset
+	 * @param observer                 observer to get notifications of optimization
+	 *                                 process
+	 * 
+	 * @throws NullPointerException     if acceptance criteria, completion condition
+	 *                                  or repairer destroyer manager is null
+	 * @throws IllegalArgumentException if list of repairers or destroyers is null
+	 *                                  or empty
+	 */
+	public AdaptiveLargeNeighborhoodSearchOptimizer(AcceptanceCriteria acceptanceCriteria,
+			CompletionCondition completionCondition, RepairerDestroyerManager<T, A> repairerDestroyerManager,
+			int updatePeriod, int scoreResetPeriod, Observer<A, T> observer) {
+		/*
+		 * Validate input arguments.
+		 */
+		Objects.requireNonNull(acceptanceCriteria, "Acceptance criteria cannot be Null");
+		Objects.requireNonNull(completionCondition, "Completion condition cannot be Null");
+		Objects.requireNonNull(repairerDestroyerManager, "RepairerDestroyerManager cannot be null");
+		if (updatePeriod < DEFAULT_UPDATE_PERIOD) {
+			throw new IllegalArgumentException("Update period cannot be lesser than " + DEFAULT_UPDATE_PERIOD);
+		}
+
+		this.acceptanceCriteria = acceptanceCriteria;
+		this.completionCondition = completionCondition;
+		this.repairerDestroyerManager = repairerDestroyerManager;
+		this.updatePeriod = updatePeriod;
+		this.scoreResetPeriod = scoreResetPeriod;
+		this.observer = observer;
+	}
+
+	/**
 	 * Executes the optimization process. Accepts a solution agent as input
 	 * optimizes the same using multiple destroy and repair heuristics based on
 	 * their performance score following ALNS methodology. The new solution agent at
