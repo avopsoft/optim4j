@@ -31,7 +31,7 @@
 
 	<modules>
 		<module>optim4j-ns</module>
-		<module>example-tsp</module>
+		<module>examples</module>
 	</modules>
 
 	<dependencies>
