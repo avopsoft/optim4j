@@ -17,8 +17,8 @@ This repository contains a java library for optimization algorithms. Current ver
 <br/>&ensp;&ensp;CompletionCondition completionCondition = new FixedIteration(100);
 <br/>&ensp;&ensp;Repairer<PartiallyDestroyedSolutionAgent, SolutionAgent> repairer = ...//Create an instance of repairer depending on problem domain
 <br/>&ensp;&ensp;Destroyer<SolutionAgent, PartiallyDestroyedSolutionAgent> destroyer = ...//Create an instance of destroyer depending on problem domain
-<br/>&ensp;&ensp;LargeNeighborhoodSearchOptimizer<SolutionAgent, PartiallyDestroyedSolutionAgent> optimizer = new LargeNeighborhoodSearchOptimizer<>(acceptanceCriteria, stoppingCondition, repairer, destroyer, observer);
-<br/>&ensp;&ensp;optimizer.optimize(initialSolutionAgent);
+<br/>&ensp;&ensp;LargeNeighborhoodSearchOptimizer<SolutionAgent, PartiallyDestroyedSolutionAgent> lnsOptimizer = new LargeNeighborhoodSearchOptimizer<>(acceptanceCriteria, stoppingCondition, repairer, destroyer, observer);
+<br/>&ensp;&ensp;lnsOptimizer.optimize(initialSolutionAgent);
 ## Adaptive Large Neighborhood Search (ALNS):
 **Adaptive Large Neighborhood Search** algorithm searches a large neighbor following LNS using multiple destroy and repair heuristics to find the optimum solution. The repair and destroy heuristic is chosen based on past performance during optimization. The implementation is provided as part of **optim4j-ns** module.
 <br/>The algorithm implements the following **pseudocode**:
