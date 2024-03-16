@@ -61,7 +61,7 @@ This repository contains a java library for optimization algorithms. Current ver
 ><br/>&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;new AdaptiveLargeNeighborhoodSearchOptimizer<>(acceptanceCriteria, completionCondition, repairers, destroyers, observer);
 <br/>&ensp;&ensp;// Invoke the optimize method.
 <br/>&ensp;&ensp;Agent finalSolutionAgent = alnsOptimizer.optimize(initialSolutionAgent);
-</br>
+
 ## Examples:
 Examples has been provided for travelling salesman problem as part of **tsp** module.
 
