@@ -13,12 +13,23 @@ This repository contains a java library for optimization algorithms. Current ver
 <br/>&ensp;&ensp;&ensp;&ensp;&ensp;a<sub>best</sub> = a
 <br/>&ensp;**return** a<sub>best</sub>
 <br/>**Usage:**
->&ensp;&ensp;AcceptanceCriteria acceptanceCriteria = new SimulatedAnnealingAcceptanceCriteria(100000, .9);
+>&ensp;&ensp;// Initialize an acceptance criteria.
+<br/>&ensp;&ensp;AcceptanceCriteria acceptanceCriteria = new SimulatedAnnealingAcceptanceCriteria(100000, .9);
+<br/>&ensp;&ensp;// Initialize the completion condition.
 <br/>&ensp;&ensp;CompletionCondition completionCondition = new FixedIteration(100);
-<br/>&ensp;&ensp;Repairer<PartiallyDestroyedSolutionAgent, SolutionAgent> repairer = ...//Create an instance of repairer depending on problem domain
-<br/>&ensp;&ensp;Destroyer<SolutionAgent, PartiallyDestroyedSolutionAgent> destroyer = ...//Create an instance of destroyer depending on problem domain
-<br/>&ensp;&ensp;LargeNeighborhoodSearchOptimizer<SolutionAgent, PartiallyDestroyedSolutionAgent> lnsOptimizer = new LargeNeighborhoodSearchOptimizer<>(acceptanceCriteria, stoppingCondition, repairer, destroyer, observer);
-<br/>&ensp;&ensp;lnsOptimizer.optimize(initialSolutionAgent);
+<br/>&ensp;&ensp;// Create a destroyer to create a partially destroyed solution out of a complete valid solution for the respective problem domain.
+<br/>&ensp;&ensp;// Create an initial solution agent
+<br/>&ensp;&ensp;Agent initialSolutionAgent = ...;
+<br/>&ensp;&ensp;Destroyer<SolutionAgent, PartiallyDestroyedSolutionAgent> destroyer = ...;
+<br/>&ensp;&ensp;// Create a repairer to recreate a complete solution from the partially destroyed solution.
+<br/>&ensp;&ensp;Repairer<PartiallyDestroyedSolutionAgent, SolutionAgent> repairer = ...;
+<br/>&ensp;&ensp;// Create an instance of large neighborhood search optimizer using the initialization parameters.
+<br/>&ensp;&ensp;LargeNeighborhoodSearchOptimizer<SolutionAgent, PartiallyDestroyedSolutionAgent> lnsOptimizer =
+<br/>&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;new LargeNeighborhoodSearchOptimizer<>(acceptanceCriteria, stoppingCondition, repairer, destroyer, observer);
+<br/>&ensp;&ensp;// Invoke the optimize method.
+<br/>&ensp;&ensp;Agent finalSolution = lnsOptimizer.optimize(initialSolutionAgent);
+
+
 ## Adaptive Large Neighborhood Search (ALNS):
 **Adaptive Large Neighborhood Search** algorithm searches a large neighbor following LNS using multiple destroy and repair heuristics to find the optimum solution. The repair and destroy heuristic is chosen based on past performance during optimization. The implementation is provided as part of **optim4j-ns** module.
 <br/>The algorithm implements the following **pseudocode**:
@@ -35,13 +46,22 @@ This repository contains a java library for optimization algorithms. Current ver
 <br/>&ensp;&ensp;&ensp;**update** scores of destroyer and repairer heuristics.
 <br/>&ensp;**return** a<sub>best</sub>
 <br/>**Usage:**
->&ensp;&ensp;AcceptanceCriteria acceptanceCriteria = new SimulatedAnnealingAcceptanceCriteria(100000, .9);
+>&ensp;&ensp;// Initialize an acceptance criteria.
+<br/>&ensp;&ensp;AcceptanceCriteria acceptanceCriteria = new SimulatedAnnealingAcceptanceCriteria(100000, .9);
+<br/>&ensp;&ensp;// Initialize the completion condition.
 <br/>&ensp;&ensp;CompletionCondition completionCondition = new FixedIteration(100);
-<br/>&ensp;&ensp;List<Repairer<PartiallyDestroyedSolutionAgent, SolutionAgent>> repairers = ...//Create a list of repairers depending on problem domain
-<br/>&ensp;&ensp;List<Destroyer<SolutionAgent, PartiallyDestroyedSolutionAgent>> destroyers = ...//Create a list of destroyers depending on problem domain
-<br/>&ensp;&ensp;AdaptiveLargeNeighborhoodSearchOptimizer<TravelRoute, PartiallyDestroyedTravelRoute> alnsOptimizer = new AdaptiveLargeNeighborhoodSearchOptimizer<>(acceptanceCriteria, completionCondition, repairers, destroyers, observer);
-<br/>&ensp;&ensp;alnsOptimizer.optimize(initialSolutionAgent);
-
+<br/>&ensp;&ensp;// Create an initial solution agent
+<br/>&ensp;&ensp;Agent initialSolutionAgent = ...;
+<br/>&ensp;&ensp;// Create a list of destroyers based on the problem domain.
+<br/>&ensp;&ensp;List<Repairer<PartiallyDestroyedSolutionAgent, SolutionAgent>> repairers = ...;
+<br/>&ensp;&ensp;// Create a list of repairers based on the problem domain.
+<br/>&ensp;&ensp;List<Destroyer<SolutionAgent, PartiallyDestroyedSolutionAgent>> destroyers = ...;
+<br/>&ensp;&ensp;// Create an instance of adaptive large neighborhood search optimizer using the initialization parameters.
+<br/>&ensp;&ensp;AdaptiveLargeNeighborhoodSearchOptimizer<TravelRoute, PartiallyDestroyedTravelRoute> alnsOptimizer =
+><br/>&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;new AdaptiveLargeNeighborhoodSearchOptimizer<>(acceptanceCriteria, completionCondition, repairers, destroyers, observer);
+<br/>&ensp;&ensp;// Invoke the optimize method.
+<br/>&ensp;&ensp;Agent finalSolutionAgent = alnsOptimizer.optimize(initialSolutionAgent);
+</br>
 ## Examples:
 Examples has been provided for travelling salesman problem as part of **tsp** module.
 
