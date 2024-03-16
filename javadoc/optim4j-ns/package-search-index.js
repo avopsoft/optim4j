@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"org.optim4j.ns.completioncond"},{"l":"org.optim4j.ns.observer"}];updateSearchResults();
