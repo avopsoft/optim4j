@@ -57,8 +57,8 @@ This repository contains a java library for optimization algorithms. Current ver
 <br/>&ensp;&ensp;// Create a list of repairers based on the problem domain.
 <br/>&ensp;&ensp;List<Destroyer<SolutionAgent, PartiallyDestroyedSolutionAgent>> destroyers = ...;
 <br/>&ensp;&ensp;// Create an instance of adaptive large neighborhood search optimizer using the initialization parameters.
-<br/>&ensp;&ensp;AdaptiveLargeNeighborhoodSearchOptimizer<TravelRoute, PartiallyDestroyedTravelRoute> alnsOptimizer =
-><br/>&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;new AdaptiveLargeNeighborhoodSearchOptimizer<>(acceptanceCriteria, completionCondition, repairers, destroyers, observer);
+<br/>&ensp;&ensp;AdaptiveLargeNeighborhoodSearchOptimizer<TravelRoute, PartiallyDestroyedTravelRoute> alnsOptimizer
+><br/>&ensp;&ensp;&ensp;&ensp;&ensp;&ensp; = new AdaptiveLargeNeighborhoodSearchOptimizer<>(acceptanceCriteria, completionCondition, repairers, destroyers, observer);
 <br/>&ensp;&ensp;// Invoke the optimize method.
 <br/>&ensp;&ensp;Agent finalSolutionAgent = alnsOptimizer.optimize(initialSolutionAgent);
 
