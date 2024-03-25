@@ -43,7 +43,7 @@ This repository contains a java library for optimization algorithms. Current ver
 <br/>&ensp;&ensp;alnsOptimizer.optimize(initialSolutionAgent);
 
 ## Examples:
-Examples has been provided for travelling salesman problem as part of **tsp** module.
+Examples has been provided for travelling salesman problem as part of **[tsp](https://github.com/avopsoft/optim4j/tree/feature/restructure/sources/examples/tsp)** module.
 
 ## References:
 1) [Roman Lutz. Adaptive Large Neighborhood Search. Bachelor thesis, Ulm University, 15.08.2014](https://d-nb.info/1072464683/34)
