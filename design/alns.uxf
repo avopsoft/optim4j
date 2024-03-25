@@ -426,8 +426,10 @@ org.optim4j.ns::Repairer&lt;T, A extends Agent&gt;
       <w>290</w>
       <h>190</h>
     </coordinates>
-    <panel_attributes>lt=&lt;..
-&lt;&lt;uses&gt;&gt;</panel_attributes>
+    <panel_attributes>lt=&lt;-
+&lt;&lt;completionCondition&gt;&gt;
+m1=1
+m2=1</panel_attributes>
     <additional_attributes>10.0;170.0;270.0;10.0</additional_attributes>
   </element>
   <element>
@@ -467,7 +469,9 @@ destroyers</panel_attributes>
       <h>270</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
-observer</panel_attributes>
+observer
+m1=1
+m2=1</panel_attributes>
     <additional_attributes>10.0;250.0;800.0;10.0</additional_attributes>
   </element>
   <element>
@@ -479,7 +483,9 @@ observer</panel_attributes>
       <h>270</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
-acceptanceCriteria</panel_attributes>
+acceptanceCriteria
+m1=1
+m2=1</panel_attributes>
     <additional_attributes>390.0;250.0;10.0;10.0</additional_attributes>
   </element>
 </diagram>
