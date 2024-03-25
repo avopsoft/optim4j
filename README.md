@@ -7,9 +7,9 @@ This repository contains a java library for optimization algorithms. Current ver
 <br/>&ensp;create initial solution a<sub>best</sub> = a ∈ A(I)
 <br/>&ensp;**while** stopping criteria not met **do**
 <br/>&ensp;&ensp;&ensp;a<sub>neighbor</sub> = repair(destroy(a))
-<br/>&ensp;&ensp;&ensp;if accept(a, a<sub>neighbor</sub>) **then**
+<br/>&ensp;&ensp;&ensp;**if** accept(a, a<sub>neighbor</sub>) **then**
 <br/>&ensp;&ensp;&ensp;&ensp;a = a<sub>neighbor</sub>
-<br/>&ensp;&ensp;&ensp;&ensp;if fitness(a) >= fitness(a<sub>best</sub>) **then**
+<br/>&ensp;&ensp;&ensp;&ensp;**if** fitness(a) >= fitness(a<sub>best</sub>) **then**
 <br/>&ensp;&ensp;&ensp;&ensp;&ensp;a<sub>best</sub> = a
 <br/>&ensp;**return** a<sub>best</sub>
 <br/>**Usage:**
@@ -39,9 +39,9 @@ This repository contains a java library for optimization algorithms. Current ver
 <br/>&ensp;&ensp;&ensp;**adjust** the probabilities p<sub>i</sub> of the destroyer and repairer heuristics **following** configured adjustment period
 <br/>&ensp;&ensp;&ensp;**select** repairer and destroyer based on their respective probabilities p<sub>i</sub>
 <br/>&ensp;&ensp;&ensp;a<sub>neighbor</sub> = repair(destroy(a))
-<br/>&ensp;&ensp;&ensp;if accept(a, a<sub>neighbor</sub>) **then**
+<br/>&ensp;&ensp;&ensp;**if** accept(a, a<sub>neighbor</sub>) **then**
 <br/>&ensp;&ensp;&ensp;&ensp;a = a<sub>neighbor</sub>
-<br/>&ensp;&ensp;&ensp;&ensp;if fitness(a) >= fitness(a<sub>best</sub>) **then**
+<br/>&ensp;&ensp;&ensp;&ensp;**if** fitness(a) >= fitness(a<sub>best</sub>) **then**
 <br/>&ensp;&ensp;&ensp;&ensp;&ensp;a<sub>best</sub> = a
 <br/>&ensp;&ensp;&ensp;**update** scores of destroyer and repairer heuristics.
 <br/>&ensp;**return** a<sub>best</sub>
