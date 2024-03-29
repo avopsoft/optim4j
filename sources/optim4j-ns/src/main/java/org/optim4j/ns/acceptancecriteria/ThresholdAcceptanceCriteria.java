@@ -27,7 +27,7 @@ public final class ThresholdAcceptanceCriteria implements AcceptanceCriteria {
 	 * The factor by which the threshold is to be reduced on each iteration of
 	 * optimization.
 	 */
-	private double reductionFactor;
+	private final double reductionFactor;
 
 	/**
 	 * Instance of logger.

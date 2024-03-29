@@ -28,14 +28,14 @@ public final class OldBachelorAcceptanceCriteria implements AcceptanceCriteria {
 	 * The factor by which the threshold is to be reduced when neighbor solution
 	 * agent is acceptable.
 	 */
-	private double reductionFactor;
+	private final double reductionFactor;
 
 	/**
 	 * The factor by which the threshold is to be increased in case the fitness
 	 * difference between current and neighbor agent is greater than current
 	 * threshold.
 	 */
-	private double incrementFactor;
+	private final double incrementFactor;
 
 	/**
 	 * Instance of logger.
