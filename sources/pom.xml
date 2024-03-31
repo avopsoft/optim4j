@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.github.avopsoft</groupId>
 	<artifactId>optim4j-parent</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>v1.0.0</version>
 	<packaging>pom</packaging>
 
 	<name>optim4j</name>
