@@ -67,3 +67,7 @@ Examples has been provided for travelling salesman problem as part of **[tsp](ht
 
 ## References:
 1) [Roman Lutz. Adaptive Large Neighborhood Search. Bachelor thesis, Ulm University, 15.08.2014](https://d-nb.info/1072464683/34)
+
+##### Contributors:
+Avijit Basak
+<br/>Subhas Acharya
