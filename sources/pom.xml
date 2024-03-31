@@ -28,6 +28,11 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<junit.version>5.7.2</junit.version>
 	</properties>
+	
+	<issueManagement>
+		<system>github</system>
+		<url>https://github.com/avopsoft/optim4j/issues</url>
+	</issueManagement>
 
 	<modules>
 		<module>optim4j-ns</module>
