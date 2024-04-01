@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>io.github.avopsoft</groupId>
 		<artifactId>examples</artifactId>
-		<version>v1.0.0</version>
+		<version>1.0.0</version>
 	</parent>
 	<artifactId>tsp</artifactId>
 
@@ -12,7 +12,7 @@
 		<dependency>
 			<groupId>io.github.avopsoft</groupId>
 			<artifactId>optim4j-ns</artifactId>
-			<version>v1.0.0</version>
+			<version>1.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
