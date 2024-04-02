@@ -25,27 +25,27 @@ public class LargeNeighborhoodSearchOptimizer<A extends Agent, T> implements Opt
 	/**
 	 * Completion condition of the optimization process.
 	 */
-	private CompletionCondition completionCondition;
+	private final CompletionCondition completionCondition;
 
 	/**
 	 * Acceptance criteria for the new neighbor solution agent.
 	 */
-	private AcceptanceCriteria acceptanceCriteria;
+	private final AcceptanceCriteria acceptanceCriteria;
 
 	/**
 	 * Observer of the optimization process.
 	 */
-	private Observer<A, T> observer;
+	private final Observer<A, T> observer;
 
 	/**
 	 * Repairer to construct a valid solution agent from partially destroyed agent.
 	 */
-	private Repairer<T, A> repairer;
+	private final Repairer<T, A> repairer;
 
 	/**
 	 * Destroyer to destroy a valid solution agent.
 	 */
-	private Destroyer<A, T> destroyer;
+	private final Destroyer<A, T> destroyer;
 
 	/** Instance of logger. **/
 	private static final Logger LOGGER = LoggerFactory.getLogger(LargeNeighborhoodSearchOptimizer.class);
@@ -65,8 +65,9 @@ public class LargeNeighborhoodSearchOptimizer<A extends Agent, T> implements Opt
 	 * 
 	 * @throws NullPointerException if any input argument is null
 	 */
-	public LargeNeighborhoodSearchOptimizer(AcceptanceCriteria acceptanceCriteria, CompletionCondition completionCondition,
-			Repairer<T, A> repairer, Destroyer<A, T> destroyer, Observer<A, T> observer) {
+	public LargeNeighborhoodSearchOptimizer(AcceptanceCriteria acceptanceCriteria,
+			CompletionCondition completionCondition, Repairer<T, A> repairer, Destroyer<A, T> destroyer,
+			Observer<A, T> observer) {
 		/*
 		 * Validate input arguments.
 		 */
