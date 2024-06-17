@@ -65,6 +65,15 @@ This repository contains a java library for optimization algorithms. Current ver
 ## Examples:
 Examples has been provided for travelling salesman problem as part of **[tsp](https://github.com/avopsoft/optim4j/tree/feature/restructure/sources/examples/tsp)** module.
 
+## Maven dependency:
+<br/>**Neightborhood Search (LNS/ALNS)**:
+<pre>
+&lt;dependency&gt;
+  &lt;groupId&gt;io.github.avopsoft&lt;/groupId&gt;
+  &lt;artifactId&gt;optim4j-ns&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</pre>
+
 ## References:
 1) [Roman Lutz. Adaptive Large Neighborhood Search. Bachelor thesis, Ulm University, 15.08.2014](https://d-nb.info/1072464683/34)
 
