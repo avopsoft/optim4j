@@ -1,5 +1,5 @@
-# [optim4j](https://github.com/avopsoft/optim4j) - A java library for optimization algorithms
-This repository contains a java library for optimization algorithms. Current version of library provides implementation of following algorithms.
+# optim4j - A java library for optimization algorithms
+This [repository](https://github.com/avopsoft/optim4j) contains a java library for optimization algorithms. Current version of library provides implementation of following algorithms.
 ## Large Neighborhood Search (LNS): 
 **Large Neighborhood Search** algorithm starts with an **initial** solution and searchs its neighborhood to find an optimum solution. The neighborhood size is considered to be large. The algorithm uses a destroy and repair heuristic to explore the domain. The implementation is provided as part of **optim4j-ns** module. The detail UML design is presented [here](https://github.com/avopsoft/optim4j/blob/main/design/optim4j-ns/lns.png). The implementation is not thread-safe and users need to take care of thread-safety for multi-threaded use case.
 <br/>The algorithm implements the following **pseudocode**:
