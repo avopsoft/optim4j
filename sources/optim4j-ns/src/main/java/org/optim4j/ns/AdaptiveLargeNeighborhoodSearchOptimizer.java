@@ -622,8 +622,8 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		 * @param destroyer selected destroyer
 		 */
 		public void updateScoresWhenNeighborNotAcceptable(Repairer<T, A> repairer, Destroyer<A, T> destroyer) {
-			this.repairerScoreMap.put(repairer,
-					this.repairerScoreMap.get(repairer) - repairerScores.scoreDecrementWhenNeighborNotAcceptable);
+			this.repairerScoreMap.put(repairer, Math.max(DEFAULT_INITIAL_SCORE,
+					this.repairerScoreMap.get(repairer) - repairerScores.scoreDecrementWhenNeighborNotAcceptable));
 			this.destroyerScoreMap.put(destroyer, Math.max(DEFAULT_INITIAL_SCORE,
 					this.destroyerScoreMap.get(destroyer) - destroyerScores.scoreDecrementWhenNeighborNotAcceptable));
 		}
