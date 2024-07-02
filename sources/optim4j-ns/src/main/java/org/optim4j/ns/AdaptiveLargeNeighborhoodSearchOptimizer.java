@@ -481,7 +481,7 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		}
 
 		/**
-		 * Reset scores of repairers and destroyers.
+		 * Reset scores of repairers and destroyers to DEFAULT_INITIAL_SCORE.
 		 */
 		public void resetScores() {
 			LOGGER.debug("reset scores of repairers and destroyers.");
@@ -616,7 +616,7 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 
 		/**
 		 * Updates repairer and destroyer scores when the neighbor agent is not
-		 * acceptable.
+		 * acceptable. The minimum score is retained as DEFAULT_INITIAL_SCORE.
 		 * 
 		 * @param repairer  selected repairer
 		 * @param destroyer selected destroyer
