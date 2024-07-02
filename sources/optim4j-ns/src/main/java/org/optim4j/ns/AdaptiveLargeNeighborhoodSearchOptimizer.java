@@ -767,6 +767,52 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 			this.scoreIncrementWhenNeighborAcceptable = scoreIncrementWhenNeighborAcceptable;
 			this.scoreDecrementWhenNeighborNotAcceptable = scoreDecrementWhenNeighborNotAcceptable;
 		}
+
+		/**
+		 * Returns initial score.
+		 * 
+		 * @return initialScore
+		 */
+		public double getInitialScore() {
+			return initialScore;
+		}
+
+		/**
+		 * Returns score increment when neighbor is better than best.
+		 * 
+		 * @return scoreIncrementWhenNeighborBetterThanBest
+		 */
+		public double getScoreIncrementWhenNeighborBetterThanBest() {
+			return scoreIncrementWhenNeighborBetterThanBest;
+		}
+
+		/**
+		 * Returns score increment when neighbor better than current.
+		 * 
+		 * @return scoreIncrementWhenNeighborBetterThanCurrent
+		 */
+		public double getScoreIncrementWhenNeighborBetterThanCurrent() {
+			return scoreIncrementWhenNeighborBetterThanCurrent;
+		}
+
+		/**
+		 * Returns score increment when neighbor is acceptable.
+		 * 
+		 * @return scoreIncrementWhenNeighborAcceptable
+		 */
+		public double getScoreIncrementWhenNeighborAcceptable() {
+			return scoreIncrementWhenNeighborAcceptable;
+		}
+
+		/**
+		 * Returns score decrement when neighbor is not acceptable.
+		 * 
+		 * @return scoreDecrementWhenNeighborNotAcceptable
+		 */
+		public double getScoreDecrementWhenNeighborNotAcceptable() {
+			return scoreDecrementWhenNeighborNotAcceptable;
+		}
+
 	}
 
 }
