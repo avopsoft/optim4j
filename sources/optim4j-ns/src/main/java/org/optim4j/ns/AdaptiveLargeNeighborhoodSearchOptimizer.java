@@ -486,10 +486,10 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		public void resetScores() {
 			LOGGER.debug("reset scores of repairers and destroyers.");
 			for (Repairer<T, A> repairer : repairerScoreMap.keySet()) {
-				repairerScoreMap.put(repairer, this.repairerScores.initialScore);
+				repairerScoreMap.put(repairer, DEFAULT_INITIAL_SCORE);
 			}
 			for (Destroyer<A, T> destroyer : destroyerScoreMap.keySet()) {
-				destroyerScoreMap.put(destroyer, this.destroyerScores.initialScore);
+				destroyerScoreMap.put(destroyer, DEFAULT_INITIAL_SCORE);
 			}
 			updateScoreBoundaries();
 		}
