@@ -481,15 +481,15 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 		}
 
 		/**
-		 * Reset scores of repairers and destroyers.
+		 * Reset scores of repairers and destroyers to DEFAULT_INITIAL_SCORE.
 		 */
 		public void resetScores() {
 			LOGGER.debug("reset scores of repairers and destroyers.");
 			for (Repairer<T, A> repairer : repairerScoreMap.keySet()) {
-				repairerScoreMap.put(repairer, this.repairerScores.initialScore);
+				repairerScoreMap.put(repairer, DEFAULT_INITIAL_SCORE);
 			}
 			for (Destroyer<A, T> destroyer : destroyerScoreMap.keySet()) {
-				destroyerScoreMap.put(destroyer, this.destroyerScores.initialScore);
+				destroyerScoreMap.put(destroyer, DEFAULT_INITIAL_SCORE);
 			}
 			updateScoreBoundaries();
 		}
@@ -616,14 +616,14 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 
 		/**
 		 * Updates repairer and destroyer scores when the neighbor agent is not
-		 * acceptable.
+		 * acceptable. The minimum score is retained as DEFAULT_INITIAL_SCORE.
 		 * 
 		 * @param repairer  selected repairer
 		 * @param destroyer selected destroyer
 		 */
 		public void updateScoresWhenNeighborNotAcceptable(Repairer<T, A> repairer, Destroyer<A, T> destroyer) {
-			this.repairerScoreMap.put(repairer,
-					this.repairerScoreMap.get(repairer) - repairerScores.scoreDecrementWhenNeighborNotAcceptable);
+			this.repairerScoreMap.put(repairer, Math.max(DEFAULT_INITIAL_SCORE,
+					this.repairerScoreMap.get(repairer) - repairerScores.scoreDecrementWhenNeighborNotAcceptable));
 			this.destroyerScoreMap.put(destroyer, Math.max(DEFAULT_INITIAL_SCORE,
 					this.destroyerScoreMap.get(destroyer) - destroyerScores.scoreDecrementWhenNeighborNotAcceptable));
 		}
@@ -767,6 +767,52 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 			this.scoreIncrementWhenNeighborAcceptable = scoreIncrementWhenNeighborAcceptable;
 			this.scoreDecrementWhenNeighborNotAcceptable = scoreDecrementWhenNeighborNotAcceptable;
 		}
+
+		/**
+		 * Returns initial score.
+		 * 
+		 * @return initialScore
+		 */
+		public double getInitialScore() {
+			return initialScore;
+		}
+
+		/**
+		 * Returns score increment when neighbor is better than best.
+		 * 
+		 * @return scoreIncrementWhenNeighborBetterThanBest
+		 */
+		public double getScoreIncrementWhenNeighborBetterThanBest() {
+			return scoreIncrementWhenNeighborBetterThanBest;
+		}
+
+		/**
+		 * Returns score increment when neighbor better than current.
+		 * 
+		 * @return scoreIncrementWhenNeighborBetterThanCurrent
+		 */
+		public double getScoreIncrementWhenNeighborBetterThanCurrent() {
+			return scoreIncrementWhenNeighborBetterThanCurrent;
+		}
+
+		/**
+		 * Returns score increment when neighbor is acceptable.
+		 * 
+		 * @return scoreIncrementWhenNeighborAcceptable
+		 */
+		public double getScoreIncrementWhenNeighborAcceptable() {
+			return scoreIncrementWhenNeighborAcceptable;
+		}
+
+		/**
+		 * Returns score decrement when neighbor is not acceptable.
+		 * 
+		 * @return scoreDecrementWhenNeighborNotAcceptable
+		 */
+		public double getScoreDecrementWhenNeighborNotAcceptable() {
+			return scoreDecrementWhenNeighborNotAcceptable;
+		}
+
 	}
 
 }
