@@ -71,7 +71,7 @@ Examples has been provided for travelling salesman problem as part of **[tsp](ht
 &lt;dependency&gt;
   &lt;groupId&gt;io.github.avopsoft&lt;/groupId&gt;
   &lt;artifactId&gt;optim4j-ns&lt;/artifactId&gt;
-  &lt;version&gt;1.0.0&lt;/version&gt;
+  &lt;version&gt;1.0.1&lt;/version&gt;
 &lt;/dependency&gt;
 </pre>
 
