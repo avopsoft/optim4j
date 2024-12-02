@@ -534,7 +534,7 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 			final Optional<Double> totalScore = repairerScoreBoundaries.keySet().stream()
 					.map(scoreBoundary -> scoreBoundary.maxScore).reduce((Double t, Double u) -> t > u ? t : u);
 			LOGGER.trace("Generate random score.");
-			if (totalScore.isEmpty()) {
+			if (!totalScore.isPresent()) {
 				throw new IllegalArgumentException("No repairer found.");
 			}
 			final double randomScore = Math.random() * totalScore.get();
@@ -559,7 +559,7 @@ public class AdaptiveLargeNeighborhoodSearchOptimizer<A extends Agent, T> implem
 			final Optional<Double> totalScore = destroyerScoreBoundaries.keySet().stream()
 					.map(scoreBoundary -> scoreBoundary.maxScore).reduce((Double t, Double u) -> t > u ? t : u);
 			LOGGER.trace("Generate random score.");
-			if (totalScore.isEmpty()) {
+			if (!totalScore.isPresent()) {
 				throw new IllegalArgumentException("No destroyer found.");
 			}
 			final double randomScore = Math.random() * totalScore.get();
